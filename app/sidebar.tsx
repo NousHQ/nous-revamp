@@ -39,13 +39,14 @@ export default async function Sidebar() {
     <aside className="resize-x w-72 p-4 border-r bg-primary dark:bg-zinc-800/40 dark:border-zinc-700 flex flex-col justify-between">
     <div>
     <h2 className="text-base font-bold mb-4 text-white">Saved Links</h2>
-    {data.map((item: any) => (
-      <nav className="grid items-start" key={item.id}>
+    {data && data.length > 0 ? (
+      data.map((item: any) => (
+        <nav className="grid items-start" key={item.id}>
           <div className="text-xs flex justify-between items-center w-full my-2">
             <a className="w-full py-2 relative rounded-lg transition-all duration-300 flex items-end justify-start gap-3 font-medium text-[#F9F9FB] hover:bg-[#70A771]/30" href={item.uri} target="_blank">
-                <span className="ml-1 text-ellipsis max-h-4 overflow-hidden break-all relative">
-                  {item.title}
-                </span>
+              <span className="ml-1 text-ellipsis max-h-4 overflow-hidden break-all relative">
+                {item.title}
+              </span>
             </a>
             <form action={deleteData}>
               <input type="hidden" name="id" value={item.id}/>
@@ -56,8 +57,10 @@ export default async function Sidebar() {
             </form>
           </div>
         </nav>
-    ))}
-    
+      ))
+    ) : (
+      <div>Bookmark using the extension!</div>
+    )}    
     </div>
     </aside>
 )}

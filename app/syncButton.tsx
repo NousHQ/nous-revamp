@@ -17,11 +17,18 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Separator } from "@/components/ui/separator"
+
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -41,6 +48,7 @@ type ParsedFolder = {
   name: string;
   checked: boolean;
   links: (ParsedLink | ParsedFolder)[];
+  open: boolean;
 };
 
 type BookmarkNodeProps = {
@@ -49,11 +57,16 @@ type BookmarkNodeProps = {
 
 
 
-export function DialogDemo() {
+export function SyncButton() {
   useEffect(() => {
     const extensionId = process.env.NEXT_PUBLIC_EXTENSION_ID;
     chrome.runtime.sendMessage(extensionId, { action: 'getBookmarks' }, (response: { bookmarks: chrome.bookmarks.BookmarkTreeNode[] }) => {
       const parsedTree = response.bookmarks.map(node => parseBookmarkTreeNode(node));
+      if (parsedTree.length > 0 && 'name' in parsedTree[0] && !parsedTree[0].name) {
+        parsedTree[0].name = 'Your bookmarks';
+        parsedTree[0].open = true;
+      }
+
       setBookmarkTree(parsedTree as ParsedFolder[]);
     })
   }, []);
@@ -65,7 +78,8 @@ export function DialogDemo() {
         id: node.id,
         name: node.title,
         checked: false,
-        partialChecked: false,
+        open: false,
+        // partialChecked: false,
         links: node.children.map(childNode => parseBookmarkTreeNode(childNode)),
       };
       return folder;
@@ -96,9 +110,9 @@ export function DialogDemo() {
     return links.every(link => link.checked);
   }
   
-  function anyChildChecked(links: (ParsedLink | ParsedFolder)[]): boolean {
-    return links.some(link => link.checked);
-  }
+  // function anyChildChecked(links: (ParsedLink | ParsedFolder)[]): boolean {
+  //   return links.some(link => link.checked);
+  // }
   
   function handleCheck(nodeId: string, checked: boolean): void {
     function updateNode(node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder {
@@ -112,53 +126,120 @@ export function DialogDemo() {
           ...node, 
           links: updatedLinks, 
           checked: allChildrenChecked(updatedLinks),
-          partialChecked: !allChildrenChecked(updatedLinks) && anyChildChecked(updatedLinks)
+          // partialChecked: !allChildrenChecked(updatedLinks) && anyChildChecked(updatedLinks)
         };
       }
     }
-    setBookmarkTree(prevTree => prevTree.map(updateNode));
+    setBookmarkTree(prevTree => prevTree.map(updateNode) as ParsedFolder[]);
   }
 
+  function handleSubmit(): void {
+    const extractCheckedNodes = (node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder | null => {
+        if ('url' in node) {
+            // It's a link
+            return node.checked ? node : null;
+        } else {
+            // It's a folder
+            const checkedChildren = node.links.map(child => extractCheckedNodes(child)).filter(Boolean) as (ParsedLink | ParsedFolder)[];
+
+            if (node.checked || checkedChildren.length > 0) {
+                return {
+                    ...node,
+                    links: checkedChildren
+                };
+            }
+            return null;
+        }
+    }
+
+    // Directly use bookmarkTree from state
+    const checkedNodes = bookmarkTree.map(node => extractCheckedNodes(node)).filter(Boolean) as ParsedFolder[];
+    console.log(checkedNodes); // Here you can see the result or do something with it
+
+    // If you want to save it to another state or variable:
+    // setCheckedNodesState(checkedNodes);  // Assuming setCheckedNodesState is your useState setter function
+  }
+
+  function toggleFolderOpen(nodeId: string, isOpen: boolean): void {
+    function updateNodeOpenState(node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder {
+      if ('url' in node) {
+        return node; // unchanged for leaf nodes
+      } else if (node.id === nodeId) {
+        return { ...node, open: isOpen }; // toggle open state for the matched folder
+      } else {
+        return { ...node, links: node.links.map(updateNodeOpenState) }; // recursively update children
+      }
+    }
+  
+    setBookmarkTree(prevTree => prevTree.map(updateNodeOpenState));
+  }
+  
   // Modify the BookmarkNode component:
   
   const BookmarkNode: React.FC<BookmarkNodeProps> = ({ node }) => {
     if ('url' in node) {
       // Link
       return (
-        <div>
-          {/* <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} /> */}
-          <a href={node.url} target="_blank" rel="noopener noreferrer">{node.name}</a>
-          <input type="checkbox" checked={node.checked} onChange={(e) => handleCheck(node.id, e.target.checked)} />
+        <div className="flex justify-between ml-5">
+          <a href={node.url} target="_blank" rel="noopener noreferrer" className="my-1 text-sm mr-4 overflow truncate max-w-[420px]">{node.name}</a>
+          <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
         </div>
       );
     } else {
       // Folder
+      const childFolders = node.links.filter(child => 'links' in child) as ParsedFolder[];
+      const childLinks = node.links.filter(child => 'url' in child) as ParsedLink[];  
+      
       return (
-        <div>
-          <div>
-            <strong>{node.name}</strong>
-            {/* <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} /> */}
-            <input type="checkbox" checked={node.checked} onChange={(e) => handleCheck(node.id, e.target.checked)} />
+        <Collapsible
+          open={node.open}
+          onOpenChange={(newOpenState) => toggleFolderOpen(node.id, newOpenState)}
+        >
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex justify-start">
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="xs">
+                  <CaretSortIcon className="h-4 w-4" />
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </CollapsibleTrigger>
+              <h4 className="text-base font-semibold">
+                {node.name}
+              </h4>
+            </div>
+            <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
           </div>
-          <div style={{ marginLeft: '20px' }}>
-            {node.links.map(childNode => (
-              <BookmarkNode key={childNode.id} node={childNode} />
-            ))}
-          </div>
-        </div>
+          <Separator />
+          <CollapsibleContent className="space-y-2">
+            <div className='ml-5'>
+              {/* Render child folders first */}
+              {childFolders.map(folder => (
+                <BookmarkNode key={folder.id} node={folder} />
+                ))}
+              {/* Render child links next */}
+              {childLinks.map(link => (
+                <BookmarkNode key={link.id} node={link} />
+                ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       );
     }
-  };
-
+};
 
   return (
     <Dialog>
       {/* Check if there's an error and display it */}
       <DialogTrigger asChild>
-        <Button variant="outline" className="fixed p-3 m-2 top-1 right-16 text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:text-white focus:outline-none focus:ring focus:ring-gray-300">Sync Bookmarks</Button>
+        <Button 
+          variant="outline"
+          className="fixed p-3 m-2 top-1 right-16 text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:text-white focus:outline-none focus:ring focus:ring-gray-300"
+        >
+          Sync Bookmarks
+        </Button>
       </DialogTrigger>
       
-      <DialogContent className="bg-white max-h-[100vh]">
+      <DialogContent className="bg-white border-2 border-black max-w-5xl h-[800px]">
         <DialogHeader>
           <DialogTitle>Import Bookmarks</DialogTitle>
           <DialogDescription>
@@ -166,14 +247,32 @@ export function DialogDemo() {
           </DialogDescription>
         </DialogHeader>
         
-        <ScrollArea className="h-96 rounded-md border p-4">
+        <ScrollArea className="max-h-full rounded-md border p-4">
           {bookmarkTree.map(node => (
             <BookmarkNode key={node.id} node={node} />
           ))}
         </ScrollArea>
-        
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button type="submit">Save changes</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Select these bookmarks?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will start downloading and indexing the selected bookmarks.
+                They will slowly show up on the sidebar and you will be able to search them.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => handleSubmit()}>
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -181,135 +280,3 @@ export function DialogDemo() {
 
 }
 
-// const [folder, setFolder] = useState({
-//   id: 'folder1',
-//   name: 'Folder 1',
-//   open: false,
-//   checked: false,
-//   links: [
-//     { id: 'link3', name: 'LinkFolder 1', checked: false },
-//     { id: 'link4', name: 'LinkFolder 2', checked: false }
-//   ]
-// });
-
-// const [links, setLinks] = useState([
-//   { id: 'link1', name: 'Link 1', checked: false },
-//   { id: 'link2', name: 'Link 2', checked: false },
-//   { id: 'link3', name: 'Link 3', checked: false },
-//   { id: 'link4', name: 'Link 4', checked: false },
-//   { id: 'link5', name: 'Link 5', checked: false },
-//   { id: 'link6', name: 'Link 6', checked: false },
-//   { id: 'link7', name: 'Link 7', checked: false },
-//   { id: 'link8', name: 'Link 8', checked: false },
-//   { id: 'link9', name: 'Link 9', checked: false },
-//   { id: 'link10', name: 'Link 10', checked: false },
-//   { id: 'link11', name: 'Link 11', checked: false },
-//   { id: 'link12', name: 'Link 12', checked: false },
-//   { id: 'link13', name: 'Link 13', checked: false },
-//   { id: 'link14', name: 'Link 14', checked: false },
-//   { id: 'link15', name: 'Link 15', checked: false },
-//   { id: 'link16', name: 'Link 16', checked: false },
-//   { id: 'link17', name: 'Link 17', checked: false },
-//   { id: 'link18', name: 'Link 18', checked: false },
-//   { id: 'link19', name: 'Link 19', checked: false },
-//   { id: 'link20', name: 'Link 20', checked: false },
-// ]);
-
-// const [isOpen, setIsOpen] = useState(false)
-
-
-// const handleFolderCheckboxChange = () => toggleFolder();
-
-// const handleLinkCheckboxChange = (linkId) => toggleIndividualLink(linkId);
-
-// const handleFolderLinkCheckboxChange = (linkId) => toggleFolderLink(linkId);
-
-// const handleFolderLabelClick = () => toggleFolderOpenStatus();
-
-// const toggleFolderOpenStatus = () => {
-//   setFolder(prev => ({ ...prev, open: !prev.open }));
-// };
-
-// const toggleFolder = () => {
-//   const isAllChecked = folder.links.every(link => link.checked);
-//   setFolder(prev => ({
-//     ...prev,
-//     checked: !prev.checked,
-//     links: prev.links.map(link => ({ ...link, checked: !isAllChecked }))
-//   }));
-// };
-
-// const toggleIndividualLink = (linkId) => {
-//   setLinks(prevLinks => 
-//     prevLinks.map(link =>
-//       link.id === linkId ? { ...link, checked: !link.checked } : link
-//     )
-//   );
-// };
-
-// const toggleFolderLink = (linkId) => {
-//   const updatedLinks = folder.links.map(link => 
-//     link.id === linkId ? { ...link, checked: !link.checked } : link
-//   );
-//   const isAllChecked = updatedLinks.every(link => link.checked);
-//   setFolder(prev => ({
-//     ...prev,
-//     links: updatedLinks,
-//     checked: isAllChecked
-//   }));
-// };
-
-// const selectedLinksCount = links.filter(link => link.checked).length;
-// const selectedFolderLinksCount = folder.links.filter(link => link.checked).length;
-// const totalSelected = selectedLinksCount + selectedFolderLinksCount;
-
-// function renderBookmarkNode(node: chrome.bookmarks.BookmarkTreeNode) {
-//   if (node.children) {
-//     // This node is a folder
-//     return (
-//       <div key={node.id}>
-//         <h4>{node.title}</h4>
-//         {node.children.map(childNode => renderBookmarkNode(childNode))}
-//       </div>
-//     );
-//   } else {
-//     // This node is a bookmark/link
-//     return (
-//       <div key={node.id}>
-//         <a href={node.url}>{node.title}</a>
-//       </div>
-//     );
-//   }
-// }
-// function renderBookmarks(data) {
-//   return data.map(item => {
-//     if (item.type === 'folder') {
-//       return (
-//         <div key={item.id} className="flex items-center justify-between space-x-4">
-//           <Collapsible open={item.open} onOpenChange={() => toggleFolderOpenStatus(item.id)}>
-//             <div className="flex items-center justify-between space-x-4">
-//               <CollapsibleTrigger asChild>
-//                 <Button variant="ghost" size="xs">
-//                   <CaretSortIcon className="h-4 w-4" />
-//                   <span className="sr-only">Toggle</span>
-//                 </Button>
-//               </CollapsibleTrigger>
-//               <h4 className="text-sm font-semibold ml-auto">{item.name}</h4>
-//               <Checkbox id={item.id} checked={item.checked} onCheckedChange={() => handleFolderCheckboxChange(item.id)}/>
-//             </div>
-//             <CollapsibleContent className="space-y-2">
-//               {renderBookmarks(item.links)}
-//             </CollapsibleContent>
-//           </Collapsible>
-//         </div>
-//       );
-//     } else {
-//       return (
-//         <div key={item.id} className="mb-2 flex items-center justify-between">
-//           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">{item.name}</label>
-//           <Checkbox className="mr-2" id={item.id} onChange={() => handleLinkCheckboxChange(item.id)}/>
-//         </div>
-//       );
-//     }
-//   });
-// }

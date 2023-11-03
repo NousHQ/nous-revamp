@@ -9,7 +9,7 @@ import SearchBarServer from "./search-bar-server"
 import Sidebar from "./sidebar"
 import SearchResults from "./searchResults"
 import Loading from "./loadingResults"
-import { DialogDemo } from "./syncButton"
+import { SyncButton } from "./syncButton"
 
 interface SearchParams {
   q: string;
@@ -29,7 +29,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
     <div key="1" className="h-screen flex flex-col justify-center dark:bg-zinc-900">
       <div className="flex flex-grow">
         <ProfileMenuServer />
-        <DialogDemo />
+        <SyncButton />
         <Sidebar />
         <div className="flex flex-grow flex-col items-center justify-start p-4 transition-all transform duration-500 ease-in-out mt-16">
           <div className="flex items-center">
