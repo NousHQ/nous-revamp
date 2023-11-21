@@ -30,7 +30,7 @@ export default async function SearchResults({ searchQuery }: SearchProps) {
   return (
     <div className="w-full max-w-3xl mx-auto mt-4 overflow-y-auto h-96">
       {data.results.map((item: SearchResult) => (
-        <Link href={item.uri} key={item.id}>
+        <Link href={item.uri} key={item.id} target="_blank">
           <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-4 mb-2">
             <h3 className="text-md font-medium dark:text-zinc-50">{item.title}</h3>
             <p className="text-zinc-500 text-sm dark:text-zinc-400">{item.uri}</p>

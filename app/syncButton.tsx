@@ -16,6 +16,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,13 +29,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Separator } from "@/components/ui/separator"
-
-
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useToast } from "@/components/ui/use-toast"
 import { CaretSortIcon } from "@radix-ui/react-icons"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { ToastAction } from "@/components/ui/toast"
 
 type ParsedLink = {
   id: string;
@@ -53,11 +53,16 @@ type ParsedFolder = {
 
 type BookmarkNodeProps = {
   node: ParsedLink | ParsedFolder;
+  disabled: boolean;
 };
 
 
-
 export function SyncButton() {
+  const supabase = createClientComponentClient()
+  const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([]);
+  const [checkedCount, setCheckedCount] = useState(0);
+  const { toast } = useToast()
+
   useEffect(() => {
     const extensionId = process.env.NEXT_PUBLIC_EXTENSION_ID;
     chrome.runtime.sendMessage(extensionId, { action: 'getBookmarks' }, (response: { bookmarks: chrome.bookmarks.BookmarkTreeNode[] }) => {
@@ -94,11 +99,6 @@ export function SyncButton() {
       return link;
     }
   }
-  const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([]);
-  
-  // const [bookmarks, setBookmarks] = useState<chrome.bookmarks.BookmarkTreeNode[]>([]);
-
-
   function checkAllChildren(node: ParsedLink | ParsedFolder, checked: boolean): ParsedLink | ParsedFolder {
     if ('url' in node) {
       return { ...node, checked };
@@ -115,6 +115,20 @@ export function SyncButton() {
   // }
   
   function handleCheck(nodeId: string, checked: boolean): void {
+    const countCheckedLinks = (nodes: (ParsedLink | ParsedFolder)[]): number => {
+      return nodes.reduce((acc, node) => {
+        // Only count the node if it's a link and it's checked
+        if ('url' in node && node.checked) {
+          acc += 1;
+        }
+        // If it's a folder, recursively count its children (which are links)
+        if ('links' in node) {
+          acc += countCheckedLinks(node.links);
+        }
+        return acc;
+      }, 0);
+    };
+    
     function updateNode(node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder {
       if (node.id === nodeId) {
         return checkAllChildren(node, checked);
@@ -123,17 +137,35 @@ export function SyncButton() {
       } else {
         const updatedLinks = node.links.map(updateNode);
         return { 
-          ...node, 
+          ...node,
           links: updatedLinks, 
           checked: allChildrenChecked(updatedLinks),
           // partialChecked: !allChildrenChecked(updatedLinks) && anyChildChecked(updatedLinks)
         };
       }
     }
-    setBookmarkTree(prevTree => prevTree.map(updateNode) as ParsedFolder[]);
+    setBookmarkTree(prevTree => {
+      const updatedTree = prevTree.map(updateNode); // Update the checked state in the tree
+      const newCount = countCheckedLinks(updatedTree); // Count checked links in the updated tree
+      if (newCount > 200) {
+        toast({
+          title: "Want more? Get PRO!",
+          description: "You can import upto 2000 bookmarks with the PRO version",
+          action: <ToastAction className="bg-white" altText="Get Pro.">Start your trial</ToastAction>,
+          className: "bg-white",
+        })
+        return prevTree; // Don't update the tree if the count exceeds 200
+      }
+      setCheckedCount(newCount); // Set the new count
+      return updatedTree; // Return the updated tree
+    });
+
+    // setBookmarkTree(prevTree => prevTree.map(updateNode) as ParsedFolder[]);
   }
 
-  function handleSubmit(): void {
+  async function handleSubmit(): Promise<void> {
+    const { data: {session} } = await supabase.auth.getSession();
+
     const extractCheckedNodes = (node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder | null => {
         if ('url' in node) {
             // It's a link
@@ -153,9 +185,34 @@ export function SyncButton() {
     }
 
     // Directly use bookmarkTree from state
-    const checkedNodes = bookmarkTree.map(node => extractCheckedNodes(node)).filter(Boolean) as ParsedFolder[];
-    console.log(checkedNodes); // Here you can see the result or do something with it
 
+    const checkedNodes = bookmarkTree.map(node => extractCheckedNodes(node)).filter(Boolean) as ParsedFolder[];
+    console.log(checkedNodes);
+    console.log(session?.access_token)
+
+    const { data, error } = await supabase
+      .from("imported_bookmarks")
+      .insert({"bookmarks": checkedNodes, "user_id": session?.user.id})
+      .select()
+   
+    if (error) {
+      console.error(error);
+    } else {
+      console.log(data);
+    }
+    // console.log(session?.access_token)
+
+    // const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    // const response = await fetch(`${apiUrl}/api/import`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Authorization': `Bearer ${session?.access_token}`,
+    //   },
+    //   body: JSON.stringify(checkedNodes),
+    // })
+
+    // const data = await response.json()
+    // console.log(data)
     // If you want to save it to another state or variable:
     // setCheckedNodesState(checkedNodes);  // Assuming setCheckedNodesState is your useState setter function
   }
@@ -176,38 +233,37 @@ export function SyncButton() {
   
   // Modify the BookmarkNode component:
   
-  const BookmarkNode: React.FC<BookmarkNodeProps> = ({ node }) => {
+  const BookmarkNode: React.FC<BookmarkNodeProps> = ({ node, disabled }) => {
     if ('url' in node) {
       // Link
       return (
-        <div className="flex justify-between ml-5">
-          <a href={node.url} target="_blank" rel="noopener noreferrer" className="my-1 text-sm mr-4 overflow truncate max-w-[420px]">{node.name}</a>
-          <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
+        <div className="flex justify-between ml-5 hover:bg-gray-200">
+          <a href={node.url} target="_blank" rel="noopener noreferrer" className="my-1 text-sm mr-4 overflow truncate max-w-[420px] hover:text-blue-500">{node.name}</a>
+          <Checkbox disabled={disabled} checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked, node)} />
         </div>
       );
     } else {
       // Folder
       const childFolders = node.links.filter(child => 'links' in child) as ParsedFolder[];
       const childLinks = node.links.filter(child => 'url' in child) as ParsedLink[];  
-      
       return (
         <Collapsible
           open={node.open}
           onOpenChange={(newOpenState) => toggleFolderOpen(node.id, newOpenState)}
         >
-          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center justify-between space-x-4">
             <div className="flex justify-start">
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" size="xs">
                   <CaretSortIcon className="h-4 w-4" />
                   <span className="sr-only">Toggle</span>
+                  <h4 className="text-base font-semibold">
+                    {node.name}
+                  </h4>
                 </Button>
               </CollapsibleTrigger>
-              <h4 className="text-base font-semibold">
-                {node.name}
-              </h4>
             </div>
-            <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
+            <Checkbox disabled={disabled} checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
           </div>
           <Separator />
           <CollapsibleContent className="space-y-2">
@@ -243,6 +299,7 @@ export function SyncButton() {
         <DialogHeader>
           <DialogTitle>Import Bookmarks</DialogTitle>
           <DialogDescription>
+            {checkedCount}/200
             Want more? Get PRO!
           </DialogDescription>
         </DialogHeader>
@@ -257,7 +314,7 @@ export function SyncButton() {
           <AlertDialogTrigger asChild>
             <Button type="submit">Save changes</Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="bg-white">
             <AlertDialogHeader>
               <AlertDialogTitle>Select these bookmarks?</AlertDialogTitle>
               <AlertDialogDescription>
@@ -266,7 +323,7 @@ export function SyncButton() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel className="bg-white">Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={() => handleSubmit()}>
                 Continue
               </AlertDialogAction>
@@ -277,6 +334,4 @@ export function SyncButton() {
       </DialogContent>
     </Dialog>
   )
-
 }
-
