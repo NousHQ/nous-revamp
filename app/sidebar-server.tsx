@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 // import { DeleteButton } from "./deleteButton";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import LinearProgress from '@mui/material/LinearProgress';
+import SavedData from "./sidebar-client";
 
 export default async function Sidebar() {
   const supabase = createServerComponentClient({ cookies });
@@ -21,7 +23,7 @@ export default async function Sidebar() {
     "use server"
     const id = formData.get('id') as string;
     const supabase = createServerActionClient({ cookies })
-    
+
     const { data, error } = await supabase
       .from("all_saved")
       .delete()
@@ -55,31 +57,12 @@ export default async function Sidebar() {
     <aside className="resize-x w-72 p-4 border-r bg-primary dark:bg-zinc-800/40 dark:border-zinc-700 flex flex-col justify-between h-screen">
       <div className="flex flex-col h-full">
         <h2 className="text-base font-bold mb-4 text-white">Saved Links</h2>
-        <ScrollArea className="rounded-md border flex-grow overflow-auto">
-          {data && data.length > 0 ? (
-            data.map((item: any) => (
-              <nav className="grid items-start" key={item.save_id}>
-                <div className="text-xs flex justify-between items-center w-full my-2">
-                  <a className="w-full py-2 relative rounded-lg transition-all duration-300 flex items-end justify-start gap-3 font-medium text-[#F9F9FB] hover:bg-[#70A771]/30" href={item.url} target="_blank">
-                    <span className="ml-1 text-ellipsis max-h-4 overflow-hidden break-all relative">
-                      {item.title}
-                    </span>
-                  </a>
-                  <form action={deleteData}>
-                    <input type="hidden" name="id" value={item.save_id}/>
-                    {/* <DeleteButton/> */}
-                    <button type="submit">
-                      <Image src={trash} alt="Delete" className="opacity-30 hover:opacity-75 mr-4 cursor-pointer"/>
-                    </button>
-                  </form>
-                </div>
-              </nav>
-            ))
-          ) : (
-            <div>Bookmark using the extension!</div>
-          )}
+        <ScrollArea className="flex-grow overflow-auto">
+          <SavedData savedData={data ?? []}/>
         </ScrollArea>
       </div>
+      <h3 className="text-sm mb-3 font-bold text-white">You can close this tab. Your bookmarks will be indexed automatically</h3>
+      <LinearProgress color="info"/>
     </aside>
 )}
 

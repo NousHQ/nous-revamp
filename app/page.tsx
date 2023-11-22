@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
 import ProfileMenuServer from "./profile-menu-server"
 import SearchBarServer from "./search-bar-server"
-import Sidebar from "./sidebar"
+import Sidebar from "./sidebar-server"
 import SearchResults from "./searchResults"
 import Loading from "./loadingResults"
 import { SyncButton } from "./syncButton"

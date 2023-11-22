@@ -53,7 +53,6 @@ type ParsedFolder = {
 
 type BookmarkNodeProps = {
   node: ParsedLink | ParsedFolder;
-  disabled: boolean;
 };
 
 
@@ -61,8 +60,23 @@ export function SyncButton() {
   const supabase = createClientComponentClient()
   const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([]);
   const [checkedCount, setCheckedCount] = useState(0);
+  const [fireToast, setFireToast] = useState(false);
   const { toast } = useToast()
 
+// First useEffect for handling the toast
+  useEffect(() => {
+    if (fireToast) {
+      toast({
+        title: "Want more? Get PRO!",
+        description: "You can import upto 2000 bookmarks with the PRO version",
+        action: <ToastAction className="bg-white" altText="Get Pro.">Start your trial</ToastAction>,
+        className: "bg-white",
+      });
+      setFireToast(false);
+    }
+  }, [fireToast]);
+
+  // Second useEffect for handling the bookmarkTree state
   useEffect(() => {
     const extensionId = process.env.NEXT_PUBLIC_EXTENSION_ID;
     chrome.runtime.sendMessage(extensionId, { action: 'getBookmarks' }, (response: { bookmarks: chrome.bookmarks.BookmarkTreeNode[] }) => {
@@ -74,7 +88,7 @@ export function SyncButton() {
 
       setBookmarkTree(parsedTree as ParsedFolder[]);
     })
-  }, []);
+  }, []); // Empty dependency array to run this effect only once on mount
 
   function parseBookmarkTreeNode(node: chrome.bookmarks.BookmarkTreeNode): ParsedLink | ParsedFolder {
     if (node.children) {
@@ -144,16 +158,11 @@ export function SyncButton() {
         };
       }
     }
-    setBookmarkTree(prevTree => {
+    setBookmarkTree((prevTree) => {
       const updatedTree = prevTree.map(updateNode); // Update the checked state in the tree
       const newCount = countCheckedLinks(updatedTree); // Count checked links in the updated tree
       if (newCount > 200) {
-        toast({
-          title: "Want more? Get PRO!",
-          description: "You can import upto 2000 bookmarks with the PRO version",
-          action: <ToastAction className="bg-white" altText="Get Pro.">Start your trial</ToastAction>,
-          className: "bg-white",
-        })
+        setFireToast(true);
         return prevTree; // Don't update the tree if the count exceeds 200
       }
       setCheckedCount(newCount); // Set the new count
@@ -233,13 +242,13 @@ export function SyncButton() {
   
   // Modify the BookmarkNode component:
   
-  const BookmarkNode: React.FC<BookmarkNodeProps> = ({ node, disabled }) => {
+  const BookmarkNode: React.FC<BookmarkNodeProps> = ({ node }) => {
     if ('url' in node) {
       // Link
       return (
         <div className="flex justify-between ml-5 hover:bg-gray-200">
           <a href={node.url} target="_blank" rel="noopener noreferrer" className="my-1 text-sm mr-4 overflow truncate max-w-[420px] hover:text-blue-500">{node.name}</a>
-          <Checkbox disabled={disabled} checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked, node)} />
+          <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
         </div>
       );
     } else {
@@ -263,7 +272,7 @@ export function SyncButton() {
                 </Button>
               </CollapsibleTrigger>
             </div>
-            <Checkbox disabled={disabled} checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
+            <Checkbox checked={node.checked} onCheckedChange={() => handleCheck(node.id, !node.checked)} />
           </div>
           <Separator />
           <CollapsibleContent className="space-y-2">
