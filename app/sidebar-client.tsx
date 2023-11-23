@@ -1,9 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect} from "react"
 import { createClientComponentClient, createServerActionClient } from "@supabase/auth-helpers-nextjs";
-// import { cookies } from "next/headers";
-// import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import trash from "@/public/trash.svg"
 import { deleteData } from "./actions";
@@ -41,7 +39,6 @@ export default function SavedData({ savedData }: { savedData: any }) {
               {/* <DeleteButton/> */}
               <button type="submit">
                 <Image src={trash} alt="Delete" className="opacity-30 hover:opacity-75 mr-4 cursor-pointer"/>
-
               </button>
             </form>
           </div>

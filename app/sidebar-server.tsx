@@ -6,8 +6,9 @@ import { revalidatePath } from "next/cache";
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 // import { DeleteButton } from "./deleteButton";
 import { ScrollArea } from "@/components/ui/scroll-area"
-import LinearProgress from '@mui/material/LinearProgress';
 import SavedData from "./sidebar-client";
+import IndexingDialogue from "@/app/indexingDialogue";
+import { IndexingContextProvider } from "@/app/indexingContext";
 
 export default async function Sidebar() {
   const supabase = createServerComponentClient({ cookies });
@@ -61,8 +62,9 @@ export default async function Sidebar() {
           <SavedData savedData={data ?? []}/>
         </ScrollArea>
       </div>
-      <h3 className="text-sm mb-3 font-bold text-white">You can close this tab. Your bookmarks will be indexed automatically</h3>
-      <LinearProgress color="info"/>
+      <IndexingContextProvider>
+        <IndexingDialogue/>
+      </IndexingContextProvider>
     </aside>
 )}
 

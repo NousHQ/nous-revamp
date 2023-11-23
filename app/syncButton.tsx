@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -55,8 +55,8 @@ type BookmarkNodeProps = {
   node: ParsedLink | ParsedFolder;
 };
 
-
 export function SyncButton() {
+
   const supabase = createClientComponentClient()
   const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([]);
   const [checkedCount, setCheckedCount] = useState(0);
@@ -123,11 +123,11 @@ export function SyncButton() {
   function allChildrenChecked(links: (ParsedLink | ParsedFolder)[]): boolean {
     return links.every(link => link.checked);
   }
-  
+
   // function anyChildChecked(links: (ParsedLink | ParsedFolder)[]): boolean {
   //   return links.some(link => link.checked);
   // }
-  
+
   function handleCheck(nodeId: string, checked: boolean): void {
     const countCheckedLinks = (nodes: (ParsedLink | ParsedFolder)[]): number => {
       return nodes.reduce((acc, node) => {
@@ -142,7 +142,7 @@ export function SyncButton() {
         return acc;
       }, 0);
     };
-    
+
     function updateNode(node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder {
       if (node.id === nodeId) {
         return checkAllChildren(node, checked);
@@ -150,9 +150,9 @@ export function SyncButton() {
         return node; // unchanged for leaf nodes that don't match
       } else {
         const updatedLinks = node.links.map(updateNode);
-        return { 
+        return {
           ...node,
-          links: updatedLinks, 
+          links: updatedLinks,
           checked: allChildrenChecked(updatedLinks),
           // partialChecked: !allChildrenChecked(updatedLinks) && anyChildChecked(updatedLinks)
         };
@@ -173,6 +173,9 @@ export function SyncButton() {
   }
 
   async function handleSubmit(): Promise<void> {
+
+
+
     const { data: {session} } = await supabase.auth.getSession();
 
     const extractCheckedNodes = (node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder | null => {
@@ -203,7 +206,7 @@ export function SyncButton() {
       .from("imported_bookmarks")
       .insert({"bookmarks": checkedNodes, "user_id": session?.user.id})
       .select()
-   
+
     if (error) {
       console.error(error);
     } else {
@@ -236,12 +239,12 @@ export function SyncButton() {
         return { ...node, links: node.links.map(updateNodeOpenState) }; // recursively update children
       }
     }
-  
+
     setBookmarkTree(prevTree => prevTree.map(updateNodeOpenState));
   }
-  
+
   // Modify the BookmarkNode component:
-  
+
   const BookmarkNode: React.FC<BookmarkNodeProps> = ({ node }) => {
     if ('url' in node) {
       // Link
@@ -254,7 +257,7 @@ export function SyncButton() {
     } else {
       // Folder
       const childFolders = node.links.filter(child => 'links' in child) as ParsedFolder[];
-      const childLinks = node.links.filter(child => 'url' in child) as ParsedLink[];  
+      const childLinks = node.links.filter(child => 'url' in child) as ParsedLink[];
       return (
         <Collapsible
           open={node.open}
@@ -296,14 +299,14 @@ export function SyncButton() {
     <Dialog>
       {/* Check if there's an error and display it */}
       <DialogTrigger asChild>
-        <Button 
+        <Button
           variant="outline"
           className="fixed p-3 m-2 top-1 right-16 text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:text-white focus:outline-none focus:ring focus:ring-gray-300"
         >
           Sync Bookmarks
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent className="bg-white border-2 border-black max-w-5xl h-[800px]">
         <DialogHeader>
           <DialogTitle>Import Bookmarks</DialogTitle>
@@ -312,7 +315,7 @@ export function SyncButton() {
             Want more? Get PRO!
           </DialogDescription>
         </DialogHeader>
-        
+
         <ScrollArea className="max-h-full rounded-md border p-4">
           {bookmarkTree.map(node => (
             <BookmarkNode key={node.id} node={node} />
