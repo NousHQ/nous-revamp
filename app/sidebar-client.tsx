@@ -24,6 +24,7 @@ export default function SavedData({ savedData }: { savedData: any }) {
     )
     .subscribe()
   }, [])
+  // console.log(savedData)
 
   return (
     <div>
