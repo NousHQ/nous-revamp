@@ -18,7 +18,7 @@ export default async function SearchResults({ searchQuery }: SearchProps) {
   const supabase = createServerComponentClient({ cookies })
   const { data: { session }} = await supabase.auth.getSession()
   const accessToken = session?.access_token;
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.API_URL;
   const response = await fetch(`${apiUrl}/api/search?query=${searchQuery}`, {
     method: 'GET',
     headers: {

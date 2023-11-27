@@ -16,7 +16,7 @@ interface SearchParams {
 }
 
 export default async function Home({ searchParams }: { searchParams: SearchParams }) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.API_URL;
   const supabase = createServerComponentClient({ cookies })
   const { data: { session }} = await supabase.auth.getSession()
   if (!session) {

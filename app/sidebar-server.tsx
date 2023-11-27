@@ -14,7 +14,7 @@ export default async function Sidebar() {
   const supabase = createServerComponentClient({ cookies });
   // const { data: {session} } = await supabase.auth.getSession();
   // const accessToken = session?.access_token;
-  // const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // const apiUrl = process.env.API_URL;
 
   const { data: { user } } = await supabase.auth.getUser()
   const {data, error} = await supabase.from("all_saved").select("*").eq("user_id", user?.id).order("created_at", {ascending: false})

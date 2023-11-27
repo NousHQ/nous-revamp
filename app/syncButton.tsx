@@ -74,7 +74,7 @@ export function SyncButton() {
       });
       setFireToast(false);
     }
-  }, [fireToast]);
+  }, [fireToast, toast]);
 
   // Second useEffect for handling the bookmarkTree state
   useEffect(() => {
@@ -88,7 +88,7 @@ export function SyncButton() {
 
       setBookmarkTree(parsedTree as ParsedFolder[]);
     })
-  }, []); // Empty dependency array to run this effect only once on mount
+  }, [parseBookmarkTreeNode]); // Empty dependency array to run this effect only once on mount
 
   function parseBookmarkTreeNode(node: chrome.bookmarks.BookmarkTreeNode): ParsedLink | ParsedFolder {
     if (node.children) {
@@ -212,7 +212,7 @@ export function SyncButton() {
     }
     // console.log(session?.access_token)
 
-    // const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    // const apiUrl = process.env.API_URL;
     // const response = await fetch(`${apiUrl}/api/import`, {
     //   method: 'POST',
     //   headers: {

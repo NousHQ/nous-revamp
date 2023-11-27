@@ -19,9 +19,9 @@ export default function SavedData({ savedData }: { savedData: any }) {
       },
       // (payload) => {console.log(payload)}
       () => {router.refresh()}
-    )
+  )
     .subscribe()
-  }, [])
+  }, [router, supabase])
 
   return (
     <div>

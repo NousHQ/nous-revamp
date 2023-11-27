@@ -25,7 +25,7 @@ export default function SearchBarClient({ session }: { session: Session | null }
     else {
       console.log('Chrome extension API is not available.');
     }
-  }, []);
+  }, [session?.access_token]);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
   const [query, setQuery] = useState(searchQuery || '');

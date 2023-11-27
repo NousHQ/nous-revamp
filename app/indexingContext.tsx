@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState} from "react";
+import React, { useContext, useState, ReactNode} from "react";
 
 const IndexingContext = React.createContext({indexState: false})
 
@@ -7,7 +7,7 @@ export function useIndexingState() {
   return useContext(IndexingContext)
 }
 
-export function IndexingContextProvider({children}) {
+export function IndexingContextProvider({children}: {children: ReactNode}) {
   const [indexState, setIndexState] = useState(false)
 
   return (
