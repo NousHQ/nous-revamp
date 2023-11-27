@@ -8,10 +8,12 @@ export default function IndexingDialogue(){
     return(
         <>
             {(indexState.indexState === true) &&
-                <>
-                    <h3 className="text-sm mb-3 font-bold text-white">You can close this tab. Your bookmarks will be indexed automatically</h3>
-                    <LinearProgress color="info"/>
-                </>
+              <div className="bg-green-500/20 p-2 mr-4 mt-6 rounded-xl">
+                  <div>
+                      <h3 className="text-sm mb-3 font-bold text-white">You can close this tab. Your bookmarks will be indexed automatically</h3>
+                      <LinearProgress color="info"/>
+                  </div>
+              </div>
             }
         </>
     )

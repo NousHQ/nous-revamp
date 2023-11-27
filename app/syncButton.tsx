@@ -174,8 +174,6 @@ export function SyncButton() {
 
   async function handleSubmit(): Promise<void> {
 
-
-
     const { data: {session} } = await supabase.auth.getSession();
 
     const extractCheckedNodes = (node: ParsedLink | ParsedFolder): ParsedLink | ParsedFolder | null => {

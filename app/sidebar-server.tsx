@@ -55,16 +55,16 @@ export default async function Sidebar() {
   }
 
   return(
-    <aside className="resize-x w-72 p-4 border-r bg-primary dark:bg-zinc-800/40 dark:border-zinc-700 flex flex-col justify-between h-screen">
+    <aside className="resize-x w-72 pl-4 py-4 border-r bg-primary dark:bg-zinc-800/40 dark:border-zinc-700 flex flex-col justify-between h-screen">
       <div className="flex flex-col h-full">
         <h2 className="text-base font-bold mb-4 text-white">Saved Links</h2>
         <ScrollArea className="flex-grow overflow-auto">
           <SavedData savedData={data ?? []}/>
         </ScrollArea>
+        <IndexingContextProvider>
+            <IndexingDialogue/>
+        </IndexingContextProvider>
       </div>
-      <IndexingContextProvider>
-        <IndexingDialogue/>
-      </IndexingContextProvider>
     </aside>
 )}
 
