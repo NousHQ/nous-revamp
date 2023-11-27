@@ -78,19 +78,24 @@ export function SyncButton() {
 
   // Second useEffect for handling the bookmarkTree state
   useEffect(() => {
-    const extensionId = process.env.NEXT_PUBLIC_EXTENSION_ID;
-    chrome.runtime.sendMessage(extensionId, { action: 'getBookmarks' }, (response: { bookmarks: chrome.bookmarks.BookmarkTreeNode[] }) => {
-      const parsedTree = response.bookmarks.map(node => parseBookmarkTreeNode(node));
-      if (parsedTree.length > 0 && 'name' in parsedTree[0] && !parsedTree[0].name) {
-        const firstNode = parsedTree[0] as ParsedFolder;
-        if ('open' in firstNode) {
-          firstNode.open = false;
+    if (chrome.runtime !== undefined) {
+      const extensionId = process.env.NEXT_PUBLIC_EXTENSION_ID;
+      chrome.runtime.sendMessage(extensionId, { action: 'getBookmarks' }, (response: { bookmarks: chrome.bookmarks.BookmarkTreeNode[] }) => {
+        const parsedTree = response.bookmarks.map(node => parseBookmarkTreeNode(node));
+        if (parsedTree.length > 0 && 'name' in parsedTree[0] && !parsedTree[0].name) {
+          const firstNode = parsedTree[0] as ParsedFolder;
+          if ('open' in firstNode) {
+            firstNode.open = false;
+          }
+          firstNode.open = true;
         }
-        firstNode.open = true;
-      }
-
-      setBookmarkTree(parsedTree as ParsedFolder[]);
-    })
+  
+        setBookmarkTree(parsedTree as ParsedFolder[]);
+      })
+    }
+    else {
+      console.log('Chrome extension API is not available.');
+    }
   }, []); // Empty dependency array to run this effect only once on mount
 
   function parseBookmarkTreeNode(node: chrome.bookmarks.BookmarkTreeNode): ParsedLink | ParsedFolder {
