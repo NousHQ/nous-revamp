@@ -82,13 +82,16 @@ export function SyncButton() {
     chrome.runtime.sendMessage(extensionId, { action: 'getBookmarks' }, (response: { bookmarks: chrome.bookmarks.BookmarkTreeNode[] }) => {
       const parsedTree = response.bookmarks.map(node => parseBookmarkTreeNode(node));
       if (parsedTree.length > 0 && 'name' in parsedTree[0] && !parsedTree[0].name) {
-        parsedTree[0].name = 'Your bookmarks';
-        parsedTree[0].open = true;
+        const firstNode = parsedTree[0] as ParsedFolder;
+        if ('open' in firstNode) {
+          firstNode.open = false;
+        }
+        firstNode.open = true;
       }
 
       setBookmarkTree(parsedTree as ParsedFolder[]);
     })
-  }, [parseBookmarkTreeNode]); // Empty dependency array to run this effect only once on mount
+  }, []); // Empty dependency array to run this effect only once on mount
 
   function parseBookmarkTreeNode(node: chrome.bookmarks.BookmarkTreeNode): ParsedLink | ParsedFolder {
     if (node.children) {
@@ -158,7 +161,7 @@ export function SyncButton() {
         };
       }
     }
-    setBookmarkTree((prevTree) => {
+    setBookmarkTree((prevTree: ParsedFolder[]) => {
       const updatedTree = prevTree.map(updateNode); // Update the checked state in the tree
       const newCount = countCheckedLinks(updatedTree); // Count checked links in the updated tree
       if (newCount > 200) {
@@ -166,7 +169,7 @@ export function SyncButton() {
         return prevTree; // Don't update the tree if the count exceeds 200
       }
       setCheckedCount(newCount); // Set the new count
-      return updatedTree; // Return the updated tree
+      return updatedTree as ParsedFolder[]; // Return the updated tree with explicit type casting
     });
 
     // setBookmarkTree(prevTree => prevTree.map(updateNode) as ParsedFolder[]);
@@ -238,7 +241,7 @@ export function SyncButton() {
       }
     }
 
-    setBookmarkTree(prevTree => prevTree.map(updateNodeOpenState));
+    setBookmarkTree((prevTree: ParsedFolder[]) => prevTree.map(updateNodeOpenState) as ParsedFolder[]);
   }
 
   // Modify the BookmarkNode component:
@@ -264,7 +267,7 @@ export function SyncButton() {
             <div className="flex items-center justify-between space-x-4">
             <div className="flex justify-start">
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="xs">
+                <Button variant="ghost">
                   <CaretSortIcon className="h-4 w-4" />
                   <span className="sr-only">Toggle</span>
                   <h4 className="text-base font-semibold">
