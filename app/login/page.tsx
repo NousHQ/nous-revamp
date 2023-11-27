@@ -25,7 +25,7 @@ export default async function Login() {
           <Image src={logo} alt="logo" className="mb-4 h-8 w-8"></Image>
           <h2 className="text-2xl font-semibold text-gray-800">Login</h2>
         </div>
-        <form 
+        <form
           className="space-y-6 pt-6"
           action="/auth/sign-in"
           method="post"
@@ -79,7 +79,7 @@ export default async function Login() {
           </Button>
         </div>
         <div className="text-center mt-4 text-sm text-gray-500">
-          Don't have an account?
+          Don&apos;t have an account?
           <Link className="text-green-400 ml-1 underline" href="/register">
             Register
           </Link>
