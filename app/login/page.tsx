@@ -1,19 +1,21 @@
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { cookies } from "next/headers"
 import Image from "next/image"
-import { cookies } from 'next/headers'
+import Link from "next/link"
 import { redirect } from "next/navigation"
+import logo from "@/public/logo.png"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
-import logo from '@/public/logo.png'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
-import Messages from './messages'
+import Messages from "./messages"
 
 export default async function Login() {
   const supabase = createServerComponentClient({ cookies })
-  const { data: { session }} = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   if (session) {
     redirect("/")
   }
@@ -25,11 +27,7 @@ export default async function Login() {
           <Image src={logo} alt="logo" className="mb-4 h-8 w-8"></Image>
           <h2 className="text-2xl font-semibold text-gray-800">Login</h2>
         </div>
-        <form
-          className="space-y-6 pt-6"
-          action="/auth/sign-in"
-          method="post"
-        >
+        <form className="space-y-6 pt-6" action="/auth/sign-in" method="post">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -59,7 +57,10 @@ export default async function Login() {
           </Button>
         </form>
         <div className="relative my-6">
-          <div aria-hidden="true" className="absolute inset-0 flex items-center">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center"
+          >
             <div className="w-full border-t border-gray-300" />
           </div>
           <div className="relative flex justify-center text-sm">
@@ -67,15 +68,20 @@ export default async function Login() {
           </div>
         </div>
         <div>
-          <Button className="w-full text-gray-600 border-gray-300 bg-gray-100" variant="outline">
-          <Image
-            src={'https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png'}
-            alt='google logo'
-            width={20}
-            height={20}
-            className="mr-3"
-          />
-          <span>Sign in with Google</span>
+          <Button
+            className="w-full text-gray-600 border-gray-300 bg-gray-100"
+            variant="outline"
+          >
+            <Image
+              src={
+                "https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png"
+              }
+              alt="google logo"
+              width={20}
+              height={20}
+              className="mr-3"
+            />
+            <span>Sign in with Google</span>
           </Button>
         </div>
         <div className="text-center mt-4 text-sm text-gray-500">

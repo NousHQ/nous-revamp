@@ -1,27 +1,26 @@
 "use server"
 
-import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache"
+import { cookies } from "next/headers"
+import { createServerActionClient } from "@supabase/auth-helpers-nextjs"
 
 export async function deleteData(formData: FormData) {
-    const id = formData.get('id') as string;
-    const supabase = createServerActionClient({ cookies })
+  const id = formData.get("id") as string
+  const supabase = createServerActionClient({ cookies })
 
-    const { data, error } = await supabase
-      .from("all_saved")
-      .delete()
-      .eq("save_id", id)
-      .order("created_at", )
-      .select()
+  const { data, error } = await supabase
+    .from("all_saved")
+    .delete()
+    .eq("save_id", id)
+    .order("created_at")
+    .select()
 
-    revalidatePath('/')
+  revalidatePath("/")
 
-      if (error) {
-        console.log(error)
-      }
-      console.log(data)
-
+  if (error) {
+    console.log(error)
+  }
+  console.log(data)
 
   //   "use server";
   //   const id = formData.get('id')
@@ -34,5 +33,4 @@ export async function deleteData(formData: FormData) {
   //   if (response.status === 200) {
   //     revalidatePath('/')
   //   }
-
-  }
+}
