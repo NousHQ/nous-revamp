@@ -2,7 +2,7 @@ import { EnvelopeIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 
 import { Button } from "@/components/ui/button"
 
-export default function ProfileInfo(user: any) {
+export default function ProfileInfo(data: any) {
   return (
     <div className="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
       <div className="px-4 sm:px-0">
@@ -27,6 +27,7 @@ export default function ProfileInfo(user: any) {
                   name="username"
                   id="first-name"
                   autoComplete="given-name"
+                  placeholder={data.user.user_name}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -45,7 +46,7 @@ export default function ProfileInfo(user: any) {
                   id="email"
                   className="block select-none w-full py-1.5 font-semibold italic text-gray-500 sm:text-sm sm:leading-6"
                 >
-                  {user.user.email}
+                  {data.user.email_id}
                 </p>
               </div>
             </div>
