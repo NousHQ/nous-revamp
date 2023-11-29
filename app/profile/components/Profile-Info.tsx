@@ -1,4 +1,4 @@
-import { UserCircleIcon } from "@heroicons/react/24/solid"
+import { EnvelopeIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 
 import { Button } from "@/components/ui/button"
 
@@ -39,14 +39,14 @@ export default function ProfileInfo(user: any) {
               >
                 Email address
               </label>
-              <div className="mt-2">
-                <input
+              <div className="mt-2 flex justify-around items-center">
+                <EnvelopeIcon className="h-6 opacity-75 text-emerald-600 mr-2" />
+                <p
                   id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6"
-                />
+                  className="block select-none w-full py-1.5 font-semibold italic text-gray-500 sm:text-sm sm:leading-6"
+                >
+                  {user.user.email}
+                </p>
               </div>
             </div>
 
