@@ -6,6 +6,8 @@ import { redirect } from "next/navigation"
 import logo from "@/public/logo.svg"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
+import WelcomeModal from "@/components/welcome-modal"
+
 import Loading from "./loadingResults"
 import ProfileMenuServer from "./profile-menu-server"
 import SearchBarServer from "./search-bar-server"
@@ -32,6 +34,7 @@ export default async function Home({
   }
 
   const { user } = session
+
   const searchQuery = searchParams.q
 
   return (
@@ -43,6 +46,7 @@ export default async function Home({
         <ProfileMenuServer />
         <SyncButton />
         <Sidebar />
+        {/*<WelcomeModal />*/}
         <div className="flex flex-grow flex-col items-center justify-start p-4 transition-all transform duration-500 ease-in-out mt-16">
           <div className="flex items-center">
             <Image src={logo} alt="logo" height={45} className="ml-4"></Image>
