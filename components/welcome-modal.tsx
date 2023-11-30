@@ -398,7 +398,6 @@ export default function WelcomeModal() {
                   <p className="-mt-2">
                     {checkedCount}/200 Want more? Get PRO!
                   </p>
-
                   <ScrollArea className="max-h-full h-72 rounded-md border p-4">
                     {bookmarkTree.map((node) => (
                       <BookmarkNode key={node.id} node={node} />
@@ -408,7 +407,7 @@ export default function WelcomeModal() {
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button className="mt-3" type="submit">
-                          Save changes
+                          Import Bookmarks
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent className="bg-white">
@@ -444,8 +443,13 @@ export default function WelcomeModal() {
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 text-center">
                     To preserve privacy, we don't import webpages that are
-                    behind authentication. Wanna import your private data? Reach
-                    out to me here!
+                    behind authentication. Wanna import your private data?
+                    <a href="">
+                      <span className="font-semibold text-green-700">
+                        {" "}
+                        Reach out to me here!
+                      </span>
+                    </a>
                   </p>
                 </div>
               </Card>
