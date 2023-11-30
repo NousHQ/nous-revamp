@@ -46,7 +46,7 @@ export default async function Home({
         <ProfileMenuServer />
         <SyncButton />
         <Sidebar />
-        {/*<WelcomeModal />*/}
+        <WelcomeModal />
         <div className="flex flex-grow flex-col items-center justify-start p-4 transition-all transform duration-500 ease-in-out mt-16">
           <div className="flex items-center">
             <Image src={logo} alt="logo" height={45} className="ml-4"></Image>
