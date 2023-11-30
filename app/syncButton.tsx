@@ -201,16 +201,13 @@ export function SyncButton() {
             return null;
         }
     }
-
-    // Directly use bookmarkTree from state
-
     const checkedNodes = bookmarkTree.map(node => extractCheckedNodes(node)).filter(Boolean) as ParsedFolder[];
     console.log(checkedNodes);
     console.log(session?.access_token)
 
     const { data, error } = await supabase
       .from("imported_bookmarks")
-      .insert({"bookmarks": checkedNodes, "user_id": session?.user.id})
+      .insert({"bookmarks": checkedNodes, "user_id": session?.user.id, "num_imported": checkedCount, "is_job_finished": false})
       .select()
 
     if (error) {

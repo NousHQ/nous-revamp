@@ -29,6 +29,16 @@ export default async function Sidebar() {
     .eq("user_id", user?.id)
     .order("created_at", { ascending: false })
 
+  const job_status = await supabase
+    .from("imported_bookmarks")
+    .select("is_job_finished")
+    .eq("user_id", user?.id)
+    .limit(1)
+
+  const isJobFinished = job_status?.data?.[0]?.is_job_finished;
+
+  console.log(job_status)
+
   async function deleteData(formData: FormData) {
     "use server"
     const id = formData.get("id") as string
@@ -41,7 +51,9 @@ export default async function Sidebar() {
       .order("created_at")
       .select()
 
-    revalidatePath("/")
+
+    
+    // revalidatePath("/")
 
     if (error) {
       console.log(error)
@@ -70,7 +82,7 @@ export default async function Sidebar() {
             <SavedData savedData={data ?? []} />
           </ScrollArea>
           <IndexingContextProvider>
-            <IndexingDialogue />
+            {!isJobFinished && <IndexingDialogue />}
           </IndexingContextProvider>
         </div>
       </aside>

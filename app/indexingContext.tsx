@@ -8,7 +8,7 @@ export function useIndexingState() {
 }
 
 export function IndexingContextProvider({children}: {children: ReactNode}) {
-  const [indexState, setIndexState] = useState(false)
+  const [indexState, setIndexState] = useState(true)
 
   return (
     <IndexingContext.Provider value={{indexState}}>
