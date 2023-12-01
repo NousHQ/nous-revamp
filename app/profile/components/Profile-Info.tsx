@@ -9,7 +9,6 @@ export default function ProfileInfo(data: any) {
   const user_data = data.user
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
-
   const [form, setForm] = useState({
     user_name: `${user_data.user_name}`,
   })

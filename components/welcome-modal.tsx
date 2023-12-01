@@ -52,9 +52,11 @@ type BookmarkNodeProps = {
 }
 
 export default function WelcomeModal() {
+  const supabase = createClientComponentClient()
+
+
   const [open, setOpen] = useState(true)
   const [step, setStep] = useState(1)
-  const supabase = createClientComponentClient()
   const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([])
   const [checkedCount, setCheckedCount] = useState(0)
   const [fireToast, setFireToast] = useState(false)
@@ -359,6 +361,17 @@ export default function WelcomeModal() {
     })
   }
 
+  const onFinished = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    const { data, error } = await supabase
+    .from("user_profiles")
+    .update({ user_name: name.user_name })
+    .eq("id", user?.id)
+    .select()
+    setOpen(false)
+  }
+
   return (
     <Transition show={open}>
       <Transition.Child
@@ -374,11 +387,11 @@ export default function WelcomeModal() {
           <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl p-8 space-y-6">
             <div className="flex justify-between items-start">
               <h2 className="text-green-800 text-2xl font-bold">
-                Welcome Guide
+                Let's get started.
               </h2>
               <Badge>{step}/7</Badge>
             </div>
-            {step === 1 && (
+            {/* {step === 1 && (
               <Card className="p-4 h-96 flex justify-around items-center">
                 <div className="flex flex-col items-center space-y-2">
                   <Image src={logo} alt="logo" className="w-12 h-12 m-4" />
@@ -391,16 +404,16 @@ export default function WelcomeModal() {
                   </p>
                 </div>
               </Card>
-            )}
+            )} */}
             {step === 2 && (
               <Card className="p-4 h-96 flex justify-around items-center">
                 <div className="flex flex-col items-center space-y-2">
                   <h3 className="text-green-700 text-lg font-semibold text-center">
-                    We would love to know you better!
+                    What's your name?
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-400 text-center">
+                  {/* <p className="text-gray-500 dark:text-gray-400 text-center">
                     Please enter your name below to get started.
-                  </p>
+                  </p> */}
                   <input
                     type="text"
                     name="user_name"
@@ -409,7 +422,7 @@ export default function WelcomeModal() {
                     value={name.user_name}
                     placeholder={name.user_name}
                     onChange={handleChange}
-                    className="w-full text-center h-12 rounded-md border-0 ring-1 ring-gray-200 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-2xl"
+                    className="w-full text-center h-12 rounded-md border-0 ring-1 ring-gray-200 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-base"
                   />
                 </div>
               </Card>
@@ -530,7 +543,7 @@ export default function WelcomeModal() {
               {step < 7 ? (
                 <Button onClick={handleNext}>Next</Button>
               ) : (
-                <Button onClick={() => setOpen(false)}>Finish</Button>
+                <Button onClick={() => onFinished()}>Finish</Button>
               )}
             </div>
           </div>
