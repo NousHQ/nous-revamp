@@ -213,6 +213,7 @@ export default function WelcomeModal() {
   }
 
   async function handleSubmit(): Promise<void> {
+    setStep(step + 1)
     const {
       data: { session },
     } = await supabase.auth.getSession()
@@ -347,6 +348,17 @@ export default function WelcomeModal() {
     }
   }
 
+  const [name, setName] = useState({
+    user_name: "Your Name",
+  })
+
+  const handleChange = (e: { target: { name: any; value: any } }) => {
+    setName({
+      ...name,
+      [e.target.name]: e.target.value,
+    })
+  }
+
   return (
     <Transition show={open}>
       <Transition.Child
@@ -364,7 +376,7 @@ export default function WelcomeModal() {
               <h2 className="text-green-800 text-2xl font-bold">
                 Welcome Guide
               </h2>
-              <Badge>{step}/6</Badge>
+              <Badge>{step}/7</Badge>
             </div>
             {step === 1 && (
               <Card className="p-4 h-96 flex justify-around items-center">
@@ -384,6 +396,28 @@ export default function WelcomeModal() {
               <Card className="p-4 h-96 flex justify-around items-center">
                 <div className="flex flex-col items-center space-y-2">
                   <h3 className="text-green-700 text-lg font-semibold text-center">
+                    We would love to know you better!
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-center">
+                    Please enter your name below to get started.
+                  </p>
+                  <input
+                    type="text"
+                    name="user_name"
+                    id="user_name"
+                    autoComplete="given-name"
+                    value={name.user_name}
+                    placeholder={name.user_name}
+                    onChange={handleChange}
+                    className="w-full h-12 rounded-md border-0 ring-1 ring-gray-200 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-2xl"
+                  />
+                </div>
+              </Card>
+            )}
+            {step === 3 && (
+              <Card className="p-4 h-96 flex justify-around items-center">
+                <div className="flex flex-col items-center space-y-2">
+                  <h3 className="text-green-700 text-lg font-semibold text-center">
                     Import your bookmarks
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 text-center">
@@ -392,13 +426,14 @@ export default function WelcomeModal() {
                 </div>
               </Card>
             )}
-            {step === 3 && (
+            {step === 4 && (
               <Card className="p-4 h-96 flex justify-around items-center">
                 <div className="bg-white w-full h-full">
                   <p className="-mt-2">
-                    {checkedCount}/200 Want more? Get PRO!
+                    Hey {name.user_name}! You have selected {checkedCount}/200
+                    bookmarks Want more? Get PRO!
                   </p>
-                  <ScrollArea className="max-h-full h-72 rounded-md border p-4">
+                  <ScrollArea className="max-h-full h-64 mt-2 rounded-md border p-4">
                     {bookmarkTree.map((node) => (
                       <BookmarkNode key={node.id} node={node} />
                     ))}
@@ -435,7 +470,7 @@ export default function WelcomeModal() {
                 </div>
               </Card>
             )}
-            {step === 4 && (
+            {step === 5 && (
               <Card className="p-4 h-96 flex justify-around items-center">
                 <div className="flex flex-col items-center space-y-2">
                   <h3 className="text-green-700 text-lg font-semibold text-center">
@@ -454,7 +489,7 @@ export default function WelcomeModal() {
                 </div>
               </Card>
             )}
-            {step === 5 && (
+            {step === 6 && (
               <Card className="p-4 h-96">
                 <div className="flex flex-col items-center space-y-2">
                   <h3 className="text-green-700 text-lg font-semibold text-center">
@@ -469,7 +504,7 @@ export default function WelcomeModal() {
                 </div>
               </Card>
             )}
-            {step === 6 && (
+            {step === 7 && (
               <Card className="p-4 h-96 flex justify-around items-center">
                 <div className="flex flex-col items-center space-y-2">
                   <h3 className="text-green-700 text-lg font-semibold text-center">
@@ -492,7 +527,7 @@ export default function WelcomeModal() {
                   Previous
                 </Button>
               )}
-              {step < 6 ? (
+              {step < 7 ? (
                 <Button onClick={handleNext}>Next</Button>
               ) : (
                 <Button onClick={() => setOpen(false)}>Finish</Button>
