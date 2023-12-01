@@ -409,7 +409,7 @@ export default function WelcomeModal() {
                     value={name.user_name}
                     placeholder={name.user_name}
                     onChange={handleChange}
-                    className="w-full h-12 rounded-md border-0 ring-1 ring-gray-200 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-2xl"
+                    className="w-full text-center h-12 rounded-md border-0 ring-1 ring-gray-200 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-2xl"
                   />
                 </div>
               </Card>
