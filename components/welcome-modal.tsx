@@ -351,7 +351,7 @@ export default function WelcomeModal() {
   }
 
   const [name, setName] = useState({
-    user_name: "Your Name",
+    user_name: "",
   })
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
@@ -420,7 +420,7 @@ export default function WelcomeModal() {
                     id="user_name"
                     autoComplete="given-name"
                     value={name.user_name}
-                    placeholder={name.user_name}
+                    placeholder="Your name"
                     onChange={handleChange}
                     className="w-full text-center h-12 rounded-md border-0 ring-1 ring-gray-200 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-base"
                   />
