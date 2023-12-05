@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 import logo from "@/public/logo.svg"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
-import WelcomeModal from "@/components/welcome-modal"
+import WelcomeModal from "@/app/onboardModal/welcome-modal"
 
 import Loading from "./loadingResults"
 import ProfileMenuServer from "./profile-menu-server"
@@ -40,7 +40,7 @@ export default async function Home({
   return (
     <div
       key="1"
-      className="h-screen flex flex-col justify-center dark:bg-zinc-900"
+      className="h-screen flex flex-col justify-center bg-green-2"
     >
       <div className="flex flex-grow">
         <ProfileMenuServer />

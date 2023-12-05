@@ -1,4 +1,5 @@
 const { fontFamily } = require("tailwindcss/defaultTheme")
+const colors = require('@radix-ui/colors');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -14,39 +15,68 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "#d8ffd8",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "#065B07",
-          foreground: "hsl(var(--primary-foreground))",
+        blue: colors.blue,
+        green: {
+          1: colors.greenA.greenA1,
+          2: colors.greenA.greenA2,
+          3: colors.greenA.greenA3,
+          4: colors.greenA.greenA4,
+          5: colors.greenA.greenA5,
+          6: colors.greenA.greenA6,
+          7: colors.greenA.greenA7,
+          8: colors.greenA.greenA8,
+          9: colors.greenA.greenA9,
+          10: colors.greenA.greenA10,
+          11: colors.greenA.greenA11,
+          12: colors.greenA.greenA12
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+        sage: {
+          1: colors.sage.sage1,
+          2: colors.sage.sage2,
+          3: colors.sage.sage3,
+          4: colors.sage.sage4,
+          5: colors.sage.sage5,
+          6: colors.sage.sage6,
+          7: colors.sage.sage7,
+          8: colors.sage.sage8,
+          9: colors.sage.sage9,
+          10: colors.sage.sage10,
+          11: colors.sage.sage11,
+          12: colors.sage.sage12,
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+        // border: "(var(--border))",
+        // input: "(var(--input))",
+        // ring: "(var(--ring))",
+        // background: "#d8ffd8",
+        // foreground: "(var(--foreground))",
+        // primary: {
+        //   DEFAULT: "#065B07",
+        //   foreground: "(var(--primary-foreground))",
+        // },
+        // secondary: {
+        //   DEFAULT: "(var(--secondary))",
+        //   foreground: "(var(--secondary-foreground))",
+        // },
+        // destructive: {
+        //   DEFAULT: "(var(--destructive))",
+        //   foreground: "(var(--destructive-foreground))",
+        // },
+        // muted: {
+        //   DEFAULT: "(var(--muted))",
+        //   foreground: "(var(--muted-foreground))",
+        // },
+        // accent: {
+        //   DEFAULT: "(var(--accent))",
+        //   foreground: "(var(--accent-foreground))",
+        // },
+        // popover: {
+        //   DEFAULT: "(var(--popover))",
+        //   foreground: "(var(--popover-foreground))",
+        // },
+        // card: {
+        //   DEFAULT: "(var(--card))",
+        //   foreground: "(var(--card-foreground))",
+        // },
       },
       borderRadius: {
         lg: `var(--radius)`,

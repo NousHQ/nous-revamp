@@ -8,11 +8,12 @@ import {
 } from "@supabase/auth-helpers-nextjs"
 
 // import { DeleteButton } from "./deleteButton";
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { IndexingContextProvider } from "@/app/indexingContext"
 import IndexingDialogue from "@/app/indexingDialogue"
 
 import SavedData from "./sidebar-client"
+import { ScrollAreaThumb, Thumb } from "@radix-ui/react-scroll-area"
 
 export default async function Sidebar() {
   const supabase = createServerComponentClient({ cookies })
@@ -75,10 +76,10 @@ export default async function Sidebar() {
 
   return (
     <>
-      <aside className="resize-x w-72 pl-4 py-4 border-r bg-primary dark:bg-zinc-800/40 dark:border-zinc-700 flex flex-col justify-between h-screen">
-        <div className="flex flex-col h-full">
-          <h2 className="text-base font-bold mb-4 text-white">Saved Links</h2>
-          <ScrollArea className="flex-grow overflow-auto">
+      <aside className="resize-x w-72 px-4 py-4 border-r bg-green-3 flex flex-col justify-between h-screen">
+        <div className="flex flex-col h-full w-full">
+          <h2 className="text-base font-bold mb-4 text-green-11">Saved Links</h2>
+          <ScrollArea className="flex-grow overflow-auto rounded-md border">
             <SavedData savedData={data ?? []} />
           </ScrollArea>
           <IndexingContextProvider>

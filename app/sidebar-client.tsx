@@ -6,6 +6,7 @@ import Image from "next/image";
 import trash from "@/public/trash.svg"
 import { deleteData } from "./actions";
 import { useRouter } from "next/navigation";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 
 export default function SavedData({ savedData }: { savedData: any }) {
   const supabase = createClientComponentClient()
@@ -27,22 +28,31 @@ export default function SavedData({ savedData }: { savedData: any }) {
     <div>
     {savedData && savedData.length > 0 ? (
       savedData.map((item: any) => (
-        <nav className="grid items-start" key={item.save_id}>
-          <div className="text-xs flex justify-between items-center w-full my-1 pr-4">
-            <a className="w-full mr-2 py-3.5 relative rounded-lg transition-all duration-300 flex items-end justify-start gap-3 font-medium text-[#F9F9FB] hover:bg-[#70A771]/30" href={item.url} target="_blank">
-              <span className="ml-1 text-ellipsis max-h-4 overflow-hidden break-all relative">
-                {item.title}
-              </span>
-            </a>
-            <form action={deleteData}>
-              <input type="hidden" name="id" value={item.save_id}/>
-              {/* <DeleteButton/> */}
-              <button type="submit" className="px-2 py-3.5 group hover:bg-[#70A771]/30 rounded-lg">
-                <Image src={trash} alt="Delete" className="w-6 opacity-30 group-hover:opacity-75 cursor-pointer"/>
-              </button>
-            </form>
-          </div>
-        </nav>
+        
+        // <nav className="grid items-start" key={item.save_id}>
+        <ContextMenu key={item.save_id}>
+          <ContextMenuTrigger>
+            <div className="text-xs flex justify-between items-center w-full pr-4">
+              <a className="w-full py-3 relative rounded-lg flex items-end justify-start gap-3 font-medium text-green-12 hover:bg-green-3" href={item.url} target="_blank">
+                <span className="ml-1 text-ellipsis max-h-4 overflow-hidden break-all relative">
+                  {item.title}
+                </span>
+              </a>
+            </div>
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem inset>
+              <form action={deleteData}>
+                <input type="hidden" name="id" value={item.save_id}/>
+                <button type="submit" className="flex items-center text-xs text-green-12 gap-3 rounded-lg w-full">
+                  <Image src={trash} alt="Delete" className="text-green-12 h-3 w-3"/>
+                  Delete
+                </button>
+              </form>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+        // </nav>
       ))
     ) : (
       <div>Bookmark using the extension!</div>

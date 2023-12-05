@@ -39,16 +39,16 @@ export default function SearchBarClient({ session }: { session: Session | null }
   }
 
   return (
-    <div className="w-full mx-auto max-w-3xl mt-16 flex items-center bg-white dark:bg-zinc-800 rounded-full shadow-md">
+    <div className="w-full mx-auto max-w-3xl mt-16 flex items-center rounded-full ">
       <Image src={searchIcon} alt="search" className="absolute h-5 w-5 ml-3"></Image>
-      <form onSubmit={handleSubmit} className="w-full">
-      <Input
-        className="pl-10 bg-white hover:bg-gray-100 w-full text-lg py-3 rounded-full dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-50 transition-all duration-200 ease-in-out"
-        placeholder="Search..."
-        type="search"
-        onChange={e => setQuery(e.target.value)}
-        value={query}
-      />
+      <form onSubmit={handleSubmit} className="w-full text-green-12">
+        <Input
+          className="bg-green-3 hover:bg-green-4 pl-10 w-full text-lg py-3 rounded-full ring-0 focus:ring-2 focus:ring-green-8 transition-all transform duration-300 ease-in-out"
+          placeholder="Search..."
+          type="search"
+          onChange={e => setQuery(e.target.value)}
+          value={query}
+        />
       </form>
     </div>
   )
