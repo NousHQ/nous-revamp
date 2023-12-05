@@ -9,7 +9,7 @@ export async function deleteData(formData: FormData) {
   const supabase = createServerActionClient({ cookies })
 
   const { data, error } = await supabase
-    .from("all_saved")
+    .from("saved_uris")
     .delete()
     .eq("save_id", id)
     .order("created_at")

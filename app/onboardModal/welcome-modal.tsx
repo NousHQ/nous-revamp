@@ -3,9 +3,9 @@
 import React, { Fragment, useState } from "react"
 import { Transition } from "@headlessui/react"
 
-import { WelcomeModalCard } from "@/app/onboardModal/welcome-modal-card"
 import ImportCard from "@/app/onboardModal/import-card"
 import NameCard from "@/app/onboardModal/name-card"
+import { WelcomeModalCard } from "@/app/onboardModal/welcome-modal-card"
 
 export default function WelcomeModal() {
   const [open, setOpen] = useState(true)
@@ -13,9 +13,9 @@ export default function WelcomeModal() {
   const [prevButtonState, setPrevButtonState] = useState(true)
   const [nextButtonState, setNextButtonState] = useState(true)
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState("")
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setName(e.target.value)
     console.log(name)
   }
 
@@ -24,31 +24,43 @@ export default function WelcomeModal() {
     // supabase send name
     // supabase update onboarding to false
     // supabase send bookmarks
-  };
-  
+  }
+
   const handleNext = () => {
-    if (cardNumber < 4) { // Assuming you have 3 cards
-      setCardNumber(prevCardNumber => prevCardNumber + 1);
-      setPrevButtonState(true);
-    if (cardNumber === 3) {
-      finishOnboarding();
-      console.log("Finished onboarding")
-      setOpen(false);
-    }
+    if (cardNumber < 5) {
+      // Assuming you have 3 cards
+      setCardNumber((prevCardNumber) => prevCardNumber + 1)
+      setPrevButtonState(true)
+      if (cardNumber === 4) {
+        finishOnboarding()
+        console.log("Finished onboarding")
+        setOpen(false)
+      }
     }
   }
   const handlePrev = () => {
     console.log(cardNumber)
     if (cardNumber > 1) {
-      setCardNumber(prevCardNumber => prevCardNumber - 1);
-      setNextButtonState(true);
+      setCardNumber((prevCardNumber) => prevCardNumber - 1)
+      setNextButtonState(true)
       if (cardNumber === 2) {
-        setPrevButtonState(false);
+        setPrevButtonState(false)
       }
     }
-  };
+  }
   const renderCard = () => {
     switch (cardNumber) {
+      // case 1:
+      //   return (
+      //     <div className="w-full h-full border">
+      //       <h3 className="text-green-700 text-lg font-semibold text-center">
+      //         Import your bookmarks
+      //       </h3>
+      //       <p className="text-gray-500 dark:text-gray-400 text-center">
+      //         We support importing from Chrome, Firefox, Safari, and Edge.
+      //       </p>
+      //     </div>
+      //   )
       case 1:
         return (
           <div>
@@ -58,37 +70,33 @@ export default function WelcomeModal() {
             <p className="text-gray-500 dark:text-gray-400 text-center">
               We support importing from Chrome, Firefox, Safari, and Edge.
             </p>
-          </div>
-        );
-      case 2:
-        return (
-          <div>
+
             <ImportCard />
           </div>
-        );
-      case 3:
+        )
+      case 2:
         return (
           <div>
             <NameCard handleNameChange={handleNameChange} />
           </div>
-        );
-      case 4:
+        )
+      case 3:
         return (
           <div className="flex flex-col items-center space-y-2">
-          <h3 className="text-green-700 text-lg font-semibold text-center">
-            Here's how it works
-          </h3>
-          <iframe
-            className="rounded-xl w-full h-80"
-            src="https://www.youtube.com/embed/ygi7otUz18U"
-            title="Nous: A search engine for bookmarks."
-            allow="autoplay; encrypted-media;"
-          ></iframe>
-        </div>
-        );
+            <h3 className="text-green-700 text-lg font-semibold text-center">
+              Here's how it works
+            </h3>
+            <iframe
+              className="rounded-xl w-full h-80"
+              src="https://www.youtube.com/embed/ygi7otUz18U"
+              title="Nous: A search engine for bookmarks."
+              allow="autoplay; encrypted-media;"
+            ></iframe>
+          </div>
+        )
       // Add more cases as needed...
       default:
-        return null;
+        return null
     }
   }
 

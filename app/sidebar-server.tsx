@@ -25,7 +25,7 @@ export default async function Sidebar() {
     data: { user },
   } = await supabase.auth.getUser()
   const { data, error } = await supabase
-    .from("all_saved")
+    .from("saved_uris")
     .select("*")
     .eq("user_id", user?.id)
     .order("created_at", { ascending: false })
@@ -46,7 +46,7 @@ export default async function Sidebar() {
     const supabase = createServerActionClient({ cookies })
 
     const { data, error } = await supabase
-      .from("all_saved")
+      .from("saved_uris")
       .delete()
       .eq("save_id", id)
       .order("created_at")
