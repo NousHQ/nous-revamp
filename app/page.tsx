@@ -26,41 +26,44 @@ export default async function Home({
   searchParams: SearchParams
 }) {
   const supabase = createServerComponentClient({ cookies })
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const sessionPromise = supabase.auth.getSession()
+  const userProfilePromise = sessionPromise.then(({ data: { session } }) => {
+    if (!session) {
+      redirect("/login")
+    }
+
+    const { user } = session
+    return supabase.from("user_profiles").select("*").eq("id", user.id)
+  })
+
+  const [
+    {
+      data: { session },
+    },
+    { data: userProfileData, error },
+  ] = await Promise.all([sessionPromise, userProfilePromise])
 
   const access_token = session?.access_token
 
-  if (!session) {
-    redirect("/login")
-  }
-
-
-  const { user } = session
-
-  const { data, error } = await supabase.from("user_profiles").select("*").eq("id", user.id)
   if (error) {
-    console.error(error);
-    return;
+    console.error(error)
+    return
   }
-  let userName, isOnboarded, isSubscribed;
 
-  if (data && data.length > 0) {
-    const { user_name, is_onboarded, is_subscribed } = data[0];
-    userName = user_name;
-    isOnboarded = is_onboarded;
-    isSubscribed = is_subscribed;
+  let userName, isOnboarded, isSubscribed
+
+  if (userProfileData && userProfileData.length > 0) {
+    const { user_name, is_onboarded, is_subscribed } = userProfileData[0]
+    userName = user_name
+    isOnboarded = is_onboarded
+    isSubscribed = is_subscribed
   }
 
   const searchQuery = searchParams.q
   console.log(searchQuery)
 
   return (
-    <div
-      key="1"
-      className="h-screen flex flex-col justify-center bg-green-1"
-    >
+    <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
       <div className="flex flex-grow">
         <ProfileMenuServer />
         {!isSubscribed && <UpgradeButton />}
@@ -76,7 +79,10 @@ export default async function Home({
           <SearchBar session={session} />
           {searchQuery ? (
             <Suspense fallback={<Loading />} key={searchQuery}>
-              <SearchResults searchQuery={searchQuery} access_token={access_token} />
+              <SearchResults
+                searchQuery={searchQuery}
+                access_token={access_token}
+              />
             </Suspense>
           ) : null}
         </div>
