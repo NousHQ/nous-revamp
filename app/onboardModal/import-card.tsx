@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/collapsible"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { ToastAction, Toast } from "@/components/ui/toast"
+import { Toast, ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 type ParsedLink = {

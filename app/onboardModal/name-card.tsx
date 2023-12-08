@@ -14,10 +14,10 @@ export default function NameCard({
   return (
     <div className="flex flex-col items-center justify-center gap-4 w-full">
       <h1 className="text-green-12 text-2xl font-semibold text-center">
-        Let's make your knowledge accessible.
+        Let&apos;s make your knowledge accessible.
       </h1>
       <h3 className="text-green-12 text-base font-semibold text-center">
-        What's your name?
+        What&apos;s your name?
       </h3>
       <Input
         type="name"
