@@ -4,6 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 interface SearchProps {
   searchQuery: string
+  access_token: string | undefined
 }
 
 interface SearchResult {
@@ -13,13 +14,17 @@ interface SearchResult {
   uri: string
 }
 
-export default async function SearchResults({ searchQuery }: SearchProps) {
-  const supabase = createServerComponentClient({ cookies })
+export default async function SearchResults({
+  searchQuery,
+  access_token,
+}: SearchProps) {
+  // const supabase = createServerComponentClient({ cookies })
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  const accessToken = session?.access_token
+  // const {
+  //   data: { session },
+  // } = await supabase.auth.getSession()
+  // const accessToken = session?.access_token
+  console.log(searchQuery)
   const apiUrl = process.env.API_URL
 
   let results
@@ -27,14 +32,20 @@ export default async function SearchResults({ searchQuery }: SearchProps) {
     const response = await fetch(`${apiUrl}/api/search?query=${searchQuery}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${access_token}`,
       },
     })
     const data = await response.json()
     if (data && data.results && data.results.length > 0) {
       results = data.results
     } else {
-      return <div>No results</div>
+      return (
+        <div className="bg-green-3 my-4 text-green-12 rounded-lg shadow-lg p-4 mb-2">
+          <h3 className="text-md font-medium dark:text-zinc-50">
+            No results found :/{" "}
+          </h3>
+        </div>
+      )
     }
   } catch (err) {
     console.error(err)
@@ -43,7 +54,7 @@ export default async function SearchResults({ searchQuery }: SearchProps) {
         <h3 className="text-md font-medium dark:text-zinc-50">
           Something failed :/{" "}
         </h3>
-        <Link className="text-green-12" href="https://x.com/sidbing">
+        <Link className="text-green-12 underline" href="https://x.com/sidbing">
           Tweet at me to let me know!
         </Link>
       </div>
@@ -51,16 +62,14 @@ export default async function SearchResults({ searchQuery }: SearchProps) {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto mt-4 overflow-y-auto h-96">
+    <div className="w-full max-w-3xl mx-auto mt-4 overflow-y-auto h-1/2">
       {results.map((item: SearchResult) => (
         <Link href={item.uri} key={item.id} target="_blank">
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-4 mb-2">
+          <div className="bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg shadow-lg p-4 mb-2">
             <h3 className="text-md font-medium dark:text-zinc-50">
               {item.title}
             </h3>
-            <p className="text-zinc-500 text-sm dark:text-zinc-400">
-              {item.uri}
-            </p>
+            <p className="text-sage-11 text-sm">{item.uri}</p>
           </div>
         </Link>
       ))}

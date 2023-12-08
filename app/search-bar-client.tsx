@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import searchIcon from "@/public/searchIcon.svg"
 import { Session } from "@supabase/auth-helpers-nextjs";
 
-export default function SearchBarClient({ session }: { session: Session | null }) {
+export default function SearchBar({ session }: { session: Session | null }) {
   useEffect(() => {
     const access_token = session?.access_token;
     if (chrome.runtime !== undefined) {
@@ -26,16 +26,24 @@ export default function SearchBarClient({ session }: { session: Session | null }
       console.log('Chrome extension API is not available.');
     }
   }, [session?.access_token]);
+
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q');
   const [query, setQuery] = useState(searchQuery || '');
 
-
-  const router = useRouter();
+  const { replace } = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(`/?q=${query}`);
+    const params = new URLSearchParams(searchParams);
+    
+    if (query) {
+      params.set('q', query);
+    } else {
+      params.delete('q');
+    }
+    console.log('submitting')
+    replace(`/?${params.toString()}`);
   }
 
   return (
@@ -43,7 +51,7 @@ export default function SearchBarClient({ session }: { session: Session | null }
       <Image src={searchIcon} alt="search" className="absolute h-6 w-6 mx-3"></Image>
       <form onSubmit={handleSubmit} className="w-full text-greenA-12">
         <Input
-          className="bg-greenA-3 hover:bg-greenA-4 pl-10 w-full text-xl font-semibold py-3 rounded-full ring-0 focus:ring-2 focus:ring-green-8 transition-all transform duration-300 ease-in-out"
+          className="bg-greenA-3 hover:bg-greenA-4 focus:bg-greenA-5 pl-10 w-full text-xl font-semibold py-3 rounded-full ring-0 focus:ring-2 focus:ring-green-8 transition-all transform duration-300 ease-in-out"
           placeholder="Search..."
           type="search"
           onChange={e => setQuery(e.target.value)}

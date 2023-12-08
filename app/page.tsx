@@ -1,4 +1,5 @@
 // @ts-nocheck
+
 import { Suspense } from "react"
 import { cookies } from "next/headers"
 import Image from "next/image"
@@ -10,10 +11,9 @@ import WelcomeModal from "@/app/onboardModal/welcome-modal"
 
 import Loading from "./loadingResults"
 import ProfileMenuServer from "./profile-menu-server"
-import SearchBarServer from "./search-bar-server"
+import SearchBar from "./search-bar-client"
 import SearchResults from "./searchResults"
 import Sidebar from "./sidebar-server"
-import { SyncButton } from "./syncButton"
 import UpgradeButton from "./upgrade-button"
 
 interface SearchParams {
@@ -25,11 +25,13 @@ export default async function Home({
 }: {
   searchParams: SearchParams
 }) {
-  const apiUrl = process.env.API_URL
   const supabase = createServerComponentClient({ cookies })
   const {
     data: { session },
   } = await supabase.auth.getSession()
+
+  const access_token = session?.access_token
+
   if (!session) {
     redirect("/login")
   }
@@ -52,6 +54,7 @@ export default async function Home({
   }
 
   const searchQuery = searchParams.q
+  console.log(searchQuery)
 
   return (
     <div
@@ -60,7 +63,6 @@ export default async function Home({
     >
       <div className="flex flex-grow">
         <ProfileMenuServer />
-        {/* <SyncButton /> */}
         {!isSubscribed && <UpgradeButton />}
         <Sidebar />
         {!isOnboarded && <WelcomeModal />}
@@ -71,10 +73,10 @@ export default async function Home({
               Hey {userName}!
             </h2>
           </div>
-          <SearchBarServer />
+          <SearchBar session={session} />
           {searchQuery ? (
             <Suspense fallback={<Loading />} key={searchQuery}>
-              <SearchResults searchQuery={searchQuery} />
+              <SearchResults searchQuery={searchQuery} access_token={access_token} />
             </Suspense>
           ) : null}
         </div>
