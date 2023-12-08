@@ -58,7 +58,7 @@ export default function Pricing() {
       <div className="flow-root bg-white pb-24 sm:pb-32">
         <div className="-mt-80">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto  w-fit">
+            <div className="mx-auto w-fit">
               {tiers.map((tier) => (
                 <div
                   key={tier.id}

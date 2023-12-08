@@ -14,6 +14,7 @@ import SearchBarServer from "./search-bar-server"
 import SearchResults from "./searchResults"
 import Sidebar from "./sidebar-server"
 import { SyncButton } from "./syncButton"
+import UpgradeButton from "./upgrade-button"
 
 interface SearchParams {
   q: string
@@ -33,25 +34,41 @@ export default async function Home({
     redirect("/login")
   }
 
+
   const { user } = session
+
+  const { data, error } = await supabase.from("user_profiles").select("*").eq("id", user.id)
+  if (error) {
+    console.error(error);
+    return;
+  }
+  let userName, isOnboarded, isSubscribed;
+
+  if (data && data.length > 0) {
+    const { user_name, is_onboarded, is_subscribed } = data[0];
+    userName = user_name;
+    isOnboarded = is_onboarded;
+    isSubscribed = is_subscribed;
+  }
 
   const searchQuery = searchParams.q
 
   return (
     <div
       key="1"
-      className="h-screen flex flex-col justify-center bg-green-2"
+      className="h-screen flex flex-col justify-center bg-green-1"
     >
       <div className="flex flex-grow">
         <ProfileMenuServer />
-        <SyncButton />
+        {/* <SyncButton /> */}
+        {!isSubscribed && <UpgradeButton />}
         <Sidebar />
-        <WelcomeModal />
-        <div className="flex flex-grow flex-col items-center justify-start p-4 transition-all transform duration-500 ease-in-out mt-16">
+        {!isOnboarded && <WelcomeModal />}
+        <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">
           <div className="flex items-center">
-            <Image src={logo} alt="logo" height={45} className="ml-4"></Image>
-            <h2 className="text-4xl font-bold ml-4 dark:text-zinc-50">
-              Hey {user.email}!
+            {/* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> */}
+            <h2 className="text-4xl font-bold text-green-12">
+              Hey {userName}!
             </h2>
           </div>
           <SearchBarServer />

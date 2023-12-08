@@ -39,11 +39,11 @@ export default function SearchBarClient({ session }: { session: Session | null }
   }
 
   return (
-    <div className="w-full mx-auto max-w-3xl mt-16 flex items-center rounded-full ">
-      <Image src={searchIcon} alt="search" className="absolute h-5 w-5 ml-3"></Image>
-      <form onSubmit={handleSubmit} className="w-full text-green-12">
+    <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
+      <Image src={searchIcon} alt="search" className="absolute h-6 w-6 mx-3"></Image>
+      <form onSubmit={handleSubmit} className="w-full text-greenA-12">
         <Input
-          className="bg-green-3 hover:bg-green-4 pl-10 w-full text-lg py-3 rounded-full ring-0 focus:ring-2 focus:ring-green-8 transition-all transform duration-300 ease-in-out"
+          className="bg-greenA-3 hover:bg-greenA-4 pl-10 w-full text-xl font-semibold py-3 rounded-full ring-0 focus:ring-2 focus:ring-green-8 transition-all transform duration-300 ease-in-out"
           placeholder="Search..."
           type="search"
           onChange={e => setQuery(e.target.value)}

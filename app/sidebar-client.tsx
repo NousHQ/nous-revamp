@@ -29,7 +29,7 @@ export default function SavedData({ savedData }: { savedData: any }) {
     {savedData && savedData.length > 0 ? (
       savedData.map((item: any) => (
         
-        // <nav className="grid items-start" key={item.save_id}>
+      // <nav className="grid items-start" key={item.save_id}>
         <ContextMenu key={item.save_id}>
           <ContextMenuTrigger>
             <div className="text-xs flex justify-between items-center w-full pr-4">
@@ -40,11 +40,11 @@ export default function SavedData({ savedData }: { savedData: any }) {
               </a>
             </div>
           </ContextMenuTrigger>
-          <ContextMenuContent>
-            <ContextMenuItem inset>
-              <form action={deleteData}>
+          <ContextMenuContent className="bg-green-1">
+            <ContextMenuItem>
+              <form action={deleteData} className="w-full" >
                 <input type="hidden" name="id" value={item.save_id}/>
-                <button type="submit" className="flex items-center text-xs text-green-12 gap-3 rounded-lg w-full">
+                <button type="submit" className="flex items-center justify-center text-xs text-green-12 bg-green-1 gap-3 rounded-lg w-full">
                   <Image src={trash} alt="Delete" className="text-green-12 h-3 w-3"/>
                   Delete
                 </button>

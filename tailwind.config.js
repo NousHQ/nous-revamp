@@ -16,7 +16,7 @@ module.exports = {
     extend: {
       colors: {
         blue: colors.blue,
-        green: {
+        greenA: {
           1: colors.greenA.greenA1,
           2: colors.greenA.greenA2,
           3: colors.greenA.greenA3,
@@ -30,6 +30,21 @@ module.exports = {
           11: colors.greenA.greenA11,
           12: colors.greenA.greenA12
         },
+        green: {
+          1: colors.green.green1,
+          2: colors.green.green2,
+          3: colors.green.green3,
+          4: colors.green.green4,
+          5: colors.green.green5,
+          6: colors.green.green6,
+          7: colors.green.green7,
+          8: colors.green.green8,
+          9: colors.green.green9,
+          10: colors.green.green10,
+          11: colors.green.green11,
+          12: colors.green.green12
+        },
+
         sage: {
           1: colors.sage.sage1,
           2: colors.sage.sage2,
