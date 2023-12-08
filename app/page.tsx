@@ -59,8 +59,8 @@ export default async function Home({
     isSubscribed = is_subscribed
   }
 
-  const searchQuery = searchParams.q
-  console.log(searchQuery)
+  const searchQuery = searchParams?.q || "";
+  searchQuery.length > 0 && console.log("query", searchQuery);
 
   return (
     <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
@@ -77,7 +77,7 @@ export default async function Home({
             </h2>
           </div>
           <SearchBar session={session} />
-          {searchQuery ? (
+          {searchQuery.length > 0 ? (
             <Suspense fallback={<Loading />} key={searchQuery}>
               <SearchResults
                 searchQuery={searchQuery}
