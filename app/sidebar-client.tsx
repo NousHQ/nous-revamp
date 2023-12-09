@@ -22,7 +22,12 @@ export default function SavedData({ savedData }: { savedData: any }) {
       () => {router.refresh()}
   )
     .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
   }, [router, supabase])
+
 
   return (
     <div>

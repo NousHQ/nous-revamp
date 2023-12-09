@@ -28,11 +28,11 @@ export default function ProfileMenuClient() {
         <Image src={userLogo} alt="user-img"></Image>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-3 mt-2">
-        <Link href={`/profile`}>
+        {/* <Link href={`/profile`}>
           <DropdownMenuItem className="cursor-pointer">
             Profile
           </DropdownMenuItem>
-        </Link>
+        </Link> */}
         <DropdownMenuItem className="cursor-pointer" onSelect={handleSignOut}>
           Sign out
         </DropdownMenuItem>
