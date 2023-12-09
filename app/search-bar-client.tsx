@@ -25,7 +25,7 @@ const useDebounce = (value: string | number, delay = 500) => {
 export default function SearchBar() {
   const router = useRouter()
   const [query, setQuery] = useState("")
-  const debouncedValue = useDebounce(query, 500)
+  const debouncedValue = useDebounce(query, 300)
 
   const triggerSearch = useCallback(() => {
     console.log("searching", debouncedValue)

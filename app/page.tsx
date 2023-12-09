@@ -65,9 +65,9 @@ export default async function Home({
   return (
     <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
       <div className="flex flex-grow">
-        <ProfileMenuServer />
+        {/* <ProfileMenuServer /> */}
         {!isSubscribed && <UpgradeButton />}
-        <Sidebar />
+        {/* <Sidebar /> */}
         {!isOnboarded && <WelcomeModal />}
         <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">
           <div className="flex items-center">
