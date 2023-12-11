@@ -45,7 +45,6 @@ export default async function Home({
   ] = await Promise.all([sessionPromise, userProfilePromise])
 
   const access_token = session?.access_token
-  console.log(session)
   if (error) {
     console.error(error)
     return
@@ -59,11 +58,10 @@ export default async function Home({
     isOnboarded = is_onboarded
     isSubscribed = is_subscribed
     userLimit = user_limit
-    
   }
 
   const searchQuery = searchParams?.q || "";
-  searchQuery.length > 0 && console.log("query", searchQuery);
+  searchQuery.length > 0 && console.log("[!] Searching for:", searchQuery, new Date());
 
   return (
     <div key="1" className="h-screen flex flex-col justify-center bg-green-1">

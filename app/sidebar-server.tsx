@@ -30,8 +30,6 @@ export default async function Sidebar() {
 
   const isJobFinished = job_status?.data?.[0]?.is_job_finished
 
-  console.log(job_status)
-
   return (
     <>
       <aside className="resize-x w-72 px-4 py-4 border-r bg-green-3 flex flex-col justify-between h-screen">

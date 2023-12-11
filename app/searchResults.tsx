@@ -1,6 +1,4 @@
-import { cookies } from "next/headers"
 import Link from "next/link"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 interface SearchProps {
   searchQuery: string
@@ -24,7 +22,6 @@ export default async function SearchResults({
   //   data: { session },
   // } = await supabase.auth.getSession()
   // const accessToken = session?.access_token
-  console.log(searchQuery)
   const apiUrl = process.env.API_URL
 
   let results
@@ -36,6 +33,7 @@ export default async function SearchResults({
       },
     })
     const data = await response.json()
+    console.log("[!] Found search results", new Date())
     if (data && data.results && data.results.length > 0) {
       results = data.results
     } else {
