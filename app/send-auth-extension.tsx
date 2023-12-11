@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
 
-export default function SendAuthExtension(access_token: string) {
+export default function SendAuthExtension({access_token}: {access_token: string}) {
   const searchParams = useSearchParams();
   const extExists = searchParams.has('ext');
   const router = useRouter()
