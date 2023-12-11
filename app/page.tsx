@@ -13,9 +13,9 @@ import Loading from "./loadingResults"
 import ProfileMenuServer from "./profile-menu-server"
 import SearchBar from "./search-bar-client"
 import SearchResults from "./searchResults"
+import SendAuthExtension from "./send-auth-extension"
 import Sidebar from "./sidebar-server"
 import UpgradeButton from "./upgrade-button"
-import SendAuthExtension from "./send-auth-extension"
 
 interface SearchParams {
   q: string
@@ -53,15 +53,17 @@ export default async function Home({
   let userName, isOnboarded, isSubscribed, userLimit
 
   if (userProfileData && userProfileData.length > 0) {
-    const { user_name, is_onboarded, is_subscribed, user_limit} = userProfileData[0]
+    const { user_name, is_onboarded, is_subscribed, user_limit } =
+      userProfileData[0]
     userName = user_name
     isOnboarded = is_onboarded
     isSubscribed = is_subscribed
     userLimit = user_limit
   }
 
-  const searchQuery = searchParams?.q || "";
-  searchQuery.length > 0 && console.log("[!] Searching for:", searchQuery, new Date());
+  const searchQuery = searchParams?.q || ""
+  searchQuery.length > 0 &&
+    console.log("[!] Searching for:", searchQuery, new Date())
 
   return (
     <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
@@ -80,13 +82,19 @@ export default async function Home({
           </div>
           <SearchBar session={session} />
           {searchQuery.length > 0 ? (
-            <Suspense fallback={<Loading />} key={searchQuery}>
+            // <Suspense fallback={<Loading />}>
               <SearchResults
                 searchQuery={searchQuery}
                 access_token={access_token}
               />
-            </Suspense>
+            // </Suspense>
           ) : null}
+          {/* {searchQuery.length > 0 ? (
+            <SearchResults
+              searchQuery={searchQuery}
+              access_token={access_token}
+            />
+          ) : null} */}
         </div>
       </div>
     </div>
