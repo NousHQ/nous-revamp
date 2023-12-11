@@ -1,7 +1,6 @@
-// "use client"
-
-// import React, { useEffect, useState } from "react"
+import { cookies } from "next/headers"
 import { CheckIcon } from "@heroicons/react/20/solid"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,15 +12,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
-
 
 export default async function UpgradeButton() {
-  const supabase = createServerComponentClient( { cookies } )
+  const supabase = createServerComponentClient({ cookies })
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
   const tiers = [
     {
       name: "Pro",
@@ -44,7 +41,10 @@ export default async function UpgradeButton() {
     <Dialog>
       {/* Check if there's an error and display it */}
       <DialogTrigger asChild>
-        <Button variant="outline" className="fixed p-3 m-2 top-1 right-16">
+        <Button
+          variant="outline"
+          className="fixed p-3 m-2 top-1 right-16 bg-green-3 hover:bg-green-5 focus:bg-green-5 border border-green-7 hover:border-green-8"
+        >
           Upgrade
         </Button>
       </DialogTrigger>
@@ -55,10 +55,7 @@ export default async function UpgradeButton() {
           {/* <DialogDescription>Want more? Get PRO!</DialogDescription> */}
         </DialogHeader>
         {tiers.map((tier) => (
-          <div
-            key={tier.id}
-            className="flex flex-col justify-between"
-          >
+          <div key={tier.id} className="flex flex-col justify-between">
             <div>
               <h3
                 id={tier.id}

@@ -51,13 +51,15 @@ export default async function Home({
     return
   }
 
-  let userName, isOnboarded, isSubscribed
+  let userName, isOnboarded, isSubscribed, userLimit
 
   if (userProfileData && userProfileData.length > 0) {
-    const { user_name, is_onboarded, is_subscribed } = userProfileData[0]
+    const { user_name, is_onboarded, is_subscribed, user_limit} = userProfileData[0]
     userName = user_name
     isOnboarded = is_onboarded
     isSubscribed = is_subscribed
+    userLimit = user_limit
+    
   }
 
   const searchQuery = searchParams?.q || "";
