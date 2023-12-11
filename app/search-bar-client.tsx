@@ -25,21 +25,30 @@ const useDebounce = (value: string | number, delay = 500) => {
 export default function SearchBar() {
   const router = useRouter()
   const [query, setQuery] = useState("")
-  const debouncedValue = useDebounce(query, 300)
+  const debouncedValue = useDebounce(query, 500)
 
-  const triggerSearch = useCallback(() => {
-    console.log("searching", debouncedValue)
-    if (query.trim() === "") {
-      router.replace(`/`)
-    } else {
-      router.replace(`/?q=${query.toString()}`)
-    }
+  // const triggerSearch = useCallback(() => {
+  //   console.log("searching", debouncedValue)
+  //   if (query.trim() === "") {
+  //     router.replace(`/`)
+  //   } else {
+  //     router.replace(`/?q=${query.toString()}`)
+  //   }
 
-  }, [debouncedValue])
+  // }, [debouncedValue])
+
+  // useEffect(() => {
+  //   triggerSearch()
+  // }, [debouncedValue])
 
   useEffect(() => {
-    triggerSearch()
-  }, [debouncedValue])
+    if (debouncedValue) {
+      router.replace(`/?q=${debouncedValue.toString()}`);
+    }
+    else {
+      router.replace(`/`);
+    }
+  }, [debouncedValue, router]);
 
   return (
     <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
