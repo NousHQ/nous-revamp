@@ -29,13 +29,12 @@ export default function SearchBar() {
 
   const triggerSearch = useCallback(() => {
     console.log("searching", debouncedValue)
-    router.replace(`/?q=${query.toString()}`)
-  }, [debouncedValue])
-
-  useEffect(() => {
-    triggerSearch()
-  }, [debouncedValue])
-
+    if (query.trim() === "") {
+      router.replace(`/`)
+    } else {
+      router.replace(`/?q=${query.toString()}`)
+    }
+  }, [debouncedValue, query])
   return (
     <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
       <Image

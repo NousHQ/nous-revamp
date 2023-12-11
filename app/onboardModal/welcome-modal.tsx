@@ -82,7 +82,9 @@ export default function WelcomeModal() {
       const { data: user_profiles, error } = await supabase
         .from("user_profiles")
         .select("user_limit")
+
       console.log(user_profiles)
+
       if (user_profiles && user_profiles.length > 0) {
         setUserLimit(user_profiles[0].user_limit)
       }
