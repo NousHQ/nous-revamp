@@ -66,7 +66,7 @@ export default async function Home({
   return (
     <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
       <div className="flex flex-grow">
-        <SendAuthExtension session={session} />
+        <SendAuthExtension access_token={access_token} />
         <ProfileMenuServer />
         {!isSubscribed && <UpgradeButton />}
         <Sidebar />
