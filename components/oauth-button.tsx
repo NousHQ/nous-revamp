@@ -13,7 +13,7 @@ export default async function OauthButton() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${getURL()}/auth/callback`,
+        redirectTo: `https://nous-revamp.vercel.app/auth/callback`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
