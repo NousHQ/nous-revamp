@@ -9,21 +9,10 @@ export default function Messages() {
 
   return (
     <>
-      {error && (
-        <div className="mt-4">
-          <div
-            className="mt-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
-            role="alert"
-          >
-            <p className="font-bold"></p>
-            <p>{error}</p>
-          </div>
-        </div>
-      )}
       {success && (
         <div className="mt-4">
           <div
-            className="mt-2 bg-green-3 border-l-4 border-green-5 text-green-11 p-4"
+            className="mt-2 bg-green-100 border-l-4 border-green-500 text-green-700 p-4"
             role="alert"
           >
             <p className="font-bold">{success}</p>

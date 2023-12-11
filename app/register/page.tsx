@@ -8,6 +8,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import OauthButton from "@/components/oauth-button"
 
 import Messages from "./messages"
 
@@ -21,11 +22,11 @@ export default async function Register() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center text-black">
-      <div className="w-96 bg-white rounded-lg shadow-lg p-8">
+    <div className="flex min-h-screen items-center justify-center bg-green-3">
+      <div className="w-96 bg-green-1 rounded-lg shadow-lg p-8">
         <div className="flex flex-col items-center">
           <Image src={logo} alt="logo" className="mb-4 h-8 w-8"></Image>
-          <h2 className="text-2xl font-semibold text-gray-800">
+          <h2 className="text-2xl font-semibold text-green-12">
             Create an account
           </h2>
         </div>
@@ -33,7 +34,7 @@ export default async function Register() {
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
-              className="w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md"
+              className="w-full px-3 py-2 border border-sage-8 hover:border-sage-9 text-green-12 bg-sage-3"
               id="email"
               placeholder="you@example.com"
               required
@@ -44,7 +45,7 @@ export default async function Register() {
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
-              className="w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md"
+              className="w-full px-3 py-2 border border-sage-8 hover:border-sage-9 text-green-12 bg-sage-3"
               id="password"
               required
               type="password"
@@ -54,7 +55,7 @@ export default async function Register() {
           <div className="space-y-2">
             <Label htmlFor="confirm-password">Confirm Password</Label>
             <Input
-              className="w-full px-3 py-2 border border-gray-300 bg-gray-100 rounded-md"
+              className="w-full px-3 py-2 border border-sage-8 hover:border-sage-9 text-green-12 bg-sage-3"
               id="confirm-password"
               required
               type="password"
@@ -62,7 +63,7 @@ export default async function Register() {
             />
           </div>
           <Button
-            className="w-full text-white bg-green-400 hover:bg-green-500 transition duration-200 rounded-md py-2 font-bold"
+            className="w-full text-white border-green-8 bg-green-9 hover:bg-green-10 focus:bg-green-5 transition duration-200 py-2 font-bold"
             type="submit"
           >
             Sign up
@@ -80,25 +81,11 @@ export default async function Register() {
           </div>
         </div>
         <div>
-          <Button
-            className="w-full text-gray-600 border-gray-300 bg-gray-100"
-            variant="outline"
-          >
-            <Image
-              src={
-                "https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png"
-              }
-              alt="google logo"
-              width={20}
-              height={20}
-              className="mr-3"
-            />
-            <span>Sign in with Google</span>
-          </Button>
+          <OauthButton />
         </div>
         <div className="text-center mt-4 text-sm text-gray-500">
           Already have an account?
-          <Link className="text-green-400 ml-1 underline" href="/login">
+          <Link className="text-green-11 ml-1 underline" href="/login">
             Login
           </Link>
         </div>

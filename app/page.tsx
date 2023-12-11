@@ -44,7 +44,7 @@ export default async function Home({
   ] = await Promise.all([sessionPromise, userProfilePromise])
 
   const access_token = session?.access_token
-
+  console.log(session)
   if (error) {
     console.error(error)
     return
