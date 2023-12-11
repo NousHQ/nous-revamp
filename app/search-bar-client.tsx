@@ -34,7 +34,13 @@ export default function SearchBar() {
     } else {
       router.replace(`/?q=${query.toString()}`)
     }
-  }, [debouncedValue, query])
+
+  }, [debouncedValue])
+
+  useEffect(() => {
+    triggerSearch()
+  }, [debouncedValue])
+
   return (
     <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
       <Image
