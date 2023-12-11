@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 import { Suspense } from "react"
 import { cookies } from "next/headers"
 import Image from "next/image"
@@ -82,12 +81,12 @@ export default async function Home({
           </div>
           <SearchBar session={session} />
           {searchQuery.length > 0 ? (
-            // <Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading />}>
               <SearchResults
                 searchQuery={searchQuery}
                 access_token={access_token}
               />
-            // </Suspense>
+            </Suspense>
           ) : null}
           {/* {searchQuery.length > 0 ? (
             <SearchResults

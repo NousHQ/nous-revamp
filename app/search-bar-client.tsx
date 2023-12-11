@@ -11,11 +11,29 @@ const useDebounce = (value: string | number, delay = 500) => {
   const [debouncedValue, setDebouncedValue] = useState<string | number>(value)
   const timerRef = useRef<NodeJS.Timeout>()
 
+  //   useEffect(() => {
+  //     timerRef.current = setTimeout(() => setDebouncedValue(value), delay)
+
+  //     return () => {
+  //       clearTimeout(timerRef.current)
+  //     }
+  //   }, [value, delay])
+
+  //   return debouncedValue
+  // }
   useEffect(() => {
-    timerRef.current = setTimeout(() => setDebouncedValue(value), delay)
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+    }
+
+    timerRef.current = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
 
     return () => {
-      clearTimeout(timerRef.current)
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
     }
   }, [value, delay])
 
@@ -43,12 +61,11 @@ export default function SearchBar() {
 
   useEffect(() => {
     if (debouncedValue) {
-      router.replace(`/?q=${debouncedValue.toString()}`);
+      router.replace(`/?q=${debouncedValue.toString()}`)
+    } else {
+      router.replace(`/`)
     }
-    else {
-      router.replace(`/`);
-    }
-  }, [debouncedValue, router]);
+  }, [debouncedValue, router])
 
   return (
     <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
