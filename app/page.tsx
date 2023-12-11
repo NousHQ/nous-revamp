@@ -15,6 +15,7 @@ import SearchBar from "./search-bar-client"
 import SearchResults from "./searchResults"
 import Sidebar from "./sidebar-server"
 import UpgradeButton from "./upgrade-button"
+import SendAuthExtension from "./send-auth-extension"
 
 interface SearchParams {
   q: string
@@ -65,6 +66,7 @@ export default async function Home({
   return (
     <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
       <div className="flex flex-grow">
+        <SendAuthExtension session={session} />
         <ProfileMenuServer />
         {!isSubscribed && <UpgradeButton />}
         <Sidebar />
