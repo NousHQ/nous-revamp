@@ -14,7 +14,8 @@ export async function POST(request: Request) {
   console.log(formData)
 
   const {data, error} = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'http://localhost:3000/auth/callback?next=/update-password/',
+    // redirectTo: 'http://localhost:3000/auth/callback?next=/update-password/',
+    redirectTo: `${getURL()}/auth/callback?next=/update-password/`,
   })
   
   if (error) {
