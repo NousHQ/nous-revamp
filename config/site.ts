@@ -12,7 +12,5 @@ export const siteConfig = {
   ],
   links: {
     twitter: "https://x.com/sidbing",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
   },
 }
