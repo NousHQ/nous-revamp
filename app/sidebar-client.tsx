@@ -34,8 +34,8 @@ export default function SavedData({ savedData }: { savedData: any }) {
     {savedData && savedData.length > 0 ? (
       savedData.map((item: any) => (
         
-      // <nav className="grid items-start" key={item.save_id}>
-        <ContextMenu key={item.save_id}>
+      // <nav className="grid items-start" key={item.id}>
+        <ContextMenu key={item.id}>
           <ContextMenuTrigger>
             <div className="text-xs flex justify-between items-center w-full pr-4">
               <a className="w-full py-3 relative rounded-lg flex items-end justify-start gap-3 font-medium text-green-12 hover:bg-green-3" href={item.url} target="_blank">
@@ -48,7 +48,7 @@ export default function SavedData({ savedData }: { savedData: any }) {
           <ContextMenuContent className="bg-green-1">
             <ContextMenuItem>
               <form action={deleteData} className="w-full" >
-                <input type="hidden" name="id" value={item.save_id}/>
+                <input type="hidden" name="id" value={item.id}/>
                 <button type="submit" className="flex items-center justify-center text-xs text-green-12 bg-green-1 gap-3 rounded-lg w-full">
                   <Image src={trash} alt="Delete" className="text-green-12 h-3 w-3"/>
                   Delete

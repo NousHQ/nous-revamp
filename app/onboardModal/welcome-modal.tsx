@@ -83,10 +83,15 @@ export default function WelcomeModal() {
         .from("user_profiles")
         .select("user_limit")
 
+      const { count } = await supabase
+      .from("saved_uris")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user?.id)
+
       console.log(user_profiles)
 
       if (user_profiles && user_profiles.length > 0) {
-        setUserLimit(user_profiles[0].user_limit)
+        setUserLimit(user_profiles[0].user_limit - (count ?? 0))
       }
     }
     initUser()
@@ -133,7 +138,7 @@ export default function WelcomeModal() {
       .from("imported_bookmarks")
       .insert({
         bookmarks: checkedNodes,
-        user_id: session?.user.id,
+        user_id: user?.id,
         num_imported: checkedCount,
         is_job_finished: false,
       })

@@ -22,8 +22,6 @@ export default function SendAuthExtension({access_token}: {access_token: string}
         }
       );
       router.replace(`/`);
-    } else {
-      console.log("Chrome extension API is not available.");
-    }
+    } 
   }, [access_token, extExists]);
 }

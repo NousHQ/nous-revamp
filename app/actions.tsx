@@ -11,7 +11,7 @@ export async function deleteData(formData: FormData) {
   const { data, error } = await supabase
     .from("saved_uris")
     .delete()
-    .eq("save_id", id)
+    .eq("id", id)
     .order("created_at")
     .select()
 

@@ -29,7 +29,6 @@ export default async function Sidebar() {
     .limit(1)
 
   const isJobFinished = job_status?.data?.[0]?.is_job_finished
-
   return (
     <>
       <aside className="resize-x w-72 px-4 py-4 border-r bg-green-3 flex flex-col justify-between h-screen">
@@ -41,7 +40,9 @@ export default async function Sidebar() {
             <SavedData savedData={data ?? []} />
           </ScrollArea>
           <IndexingContextProvider>
-            {!isJobFinished && <IndexingDialogue />}
+            {isJobFinished != undefined && !isJobFinished && (
+              <IndexingDialogue />
+            )}
           </IndexingContextProvider>
         </div>
       </aside>

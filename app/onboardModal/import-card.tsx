@@ -1,12 +1,9 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import Link from "next/link"
 import { CaretSortIcon } from "@radix-ui/react-icons"
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs"
+import { User } from "@supabase/auth-helpers-nextjs"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -17,8 +14,7 @@ import {
 } from "@/components/ui/collapsible"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Toast, ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 type ParsedLink = {
   id: string
@@ -66,8 +62,6 @@ export default function ImportCard({
   setFireToast,
   toast,
 }: ImportCardProps) {
-  const supabase = createClientComponentClient()
-
   // First useEffect for handling the toast
   useEffect(() => {
     if (fireToast) {
@@ -75,7 +69,7 @@ export default function ImportCard({
         title: "Want more? Get PRO!",
         description: "You can have upto 1000 bookmarks with the PRO version",
         action: (
-          <ToastAction className="bg-green-9 text-green-1" altText="Get Pro.">
+          <ToastAction className="bg-green-9 text-green-12" altText="Get Pro.">
             <Link
               href={`https://nous.lemonsqueezy.com/checkout/buy/10d0e744-9bca-47ad-af82-1e6e7427cf1f?checkout[custom][user_id]=${user?.id}&checkout[email]=${user?.email}`}
             >
@@ -83,7 +77,7 @@ export default function ImportCard({
             </Link>
           </ToastAction>
         ),
-        className: "bg-green-5 border-green-8 text-sage-11",
+        className: "bg-green-5 border-green-8 text-green-12",
       })
       setFireToast(false)
     }
@@ -365,10 +359,11 @@ export default function ImportCard({
           <BookmarkNode key={node.id} node={node} />
         ))}
       </ScrollArea>
-      <div className="mt-auto p-2">
-        <p className="text-sage-12 font-semibold text-sm">
+      <div className="p-2 text-sage-12 font-semibold text-sm">
+        <p>
           {checkedCount}/{maxCheckedCount} bookmarks selected.
         </p>
+        <p>You can have 250 total bookmarks with the free version. </p>
 
         {/* <AlertDialog>
         <AlertDialogTrigger asChild>
