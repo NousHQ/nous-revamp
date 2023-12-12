@@ -61,7 +61,7 @@ export default function WelcomeModal() {
         action: (
           <ToastAction className="bg-green-9 text-green-1" altText="Get Pro.">
             <Link
-              href={`https://nous.lemonsqueezy.com/checkout/buy/10d0e744-9bca-47ad-af82-1e6e7427cf1f?checkout[custom][user_id]=${user?.id}&checkout[email]=${user?.email}`}
+              href={`https://nous.lemonsqueezy.com/checkout/buy/82a52c59-48db-430d-84de-122206ef2002?checkout[custom][user_id]=${user?.id}&checkout[email]=${user?.email}`}
             >
               Upgrade Now!
             </Link>

@@ -23,7 +23,7 @@ export default async function UpgradeButton() {
     {
       name: "Pro",
       id: "tier-pro",
-      href: `https://nous.lemonsqueezy.com/checkout/buy/10d0e744-9bca-47ad-af82-1e6e7427cf1f?checkout[custom][user_id]=${user?.id}&checkout[email]=${user?.email}`,
+      href: `https://nous.lemonsqueezy.com/checkout/buy/82a52c59-48db-430d-84de-122206ef2002?checkout[custom][user_id]=${user?.id}&checkout[email]=${user?.email}`,
       priceMonthly: "$5",
       description:
         "Use Nous as your personal information librarian. Support the tool and get access to the latest features!",
