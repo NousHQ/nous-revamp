@@ -7,7 +7,7 @@ const tiers = [
     href: '#',
     priceMonthly: '$5',
     description: 'Use Nous as your personal information librarian. Support the tool and get access to the latest features in development.',
-    features: ['2000 browser bookmarks', 'Search your 𝕏 bookmarks (coming soon)', 'Search your phone screenshots (coming soon)', '...and many more.'],
+    features: ['1000 browser bookmarks', 'Search your 𝕏 bookmarks (coming soon)', 'Search your phone screenshots (coming soon)', '...and many more.'],
   },
 //   {
 //     name: 'Team',

@@ -68,7 +68,7 @@ export function SyncButton() {
     if (fireToast) {
       toast({
         title: "Want more? Get PRO!",
-        description: "You can import upto 2000 bookmarks with the PRO version",
+        description: "You can import upto 1000 bookmarks with the PRO version",
         action: <ToastAction className="bg-white" altText="Get Pro.">Start your trial</ToastAction>,
         className: "bg-white",
       });

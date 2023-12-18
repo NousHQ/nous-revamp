@@ -28,7 +28,7 @@ export default async function UpgradeButton() {
       description:
         "Use Nous as your personal information librarian. Support the tool and get access to the latest features!",
       features: [
-        "Save upto 2000 bookmarks",
+        "Save upto 1000 bookmarks",
         "Search 𝕏 Bookmarks (coming soon)",
         "Search Android Screenshots (coming soon)",
         "Add custom labels (coming soon)",
