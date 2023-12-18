@@ -240,7 +240,7 @@ export default function WelcomeModal() {
             </h3>
             <iframe
               className="rounded-xl w-full h-full"
-              src="https://www.youtube.com/embed/ygi7otUz18U"
+              src="https://www.youtube.com/embed/zDqDLFW1pJ0"
               title="Nous: A search engine for bookmarks."
               allow="autoplay; encrypted-media;"
             ></iframe>
