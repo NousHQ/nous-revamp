@@ -45,20 +45,6 @@ export default function SearchBar() {
   const [query, setQuery] = useState("")
   const debouncedValue = useDebounce(query, 500)
 
-  // const triggerSearch = useCallback(() => {
-  //   console.log("searching", debouncedValue)
-  //   if (query.trim() === "") {
-  //     router.replace(`/`)
-  //   } else {
-  //     router.replace(`/?q=${query.toString()}`)
-  //   }
-
-  // }, [debouncedValue])
-
-  // useEffect(() => {
-  //   triggerSearch()
-  // }, [debouncedValue])
-
   useEffect(() => {
     if (debouncedValue) {
       router.replace(`/?q=${debouncedValue.toString()}`)
