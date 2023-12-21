@@ -5,18 +5,24 @@ import { useState } from "react"
 import Image from "next/image"
 // Assets
 import searchIcon from "@/public/searchIcon.svg"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 // Components
 import { Input } from "@/components/ui/input"
 import { Search } from "@/app/(search)/searchFunction"
 
-export default function Search_Bar(access_token: string | undefined) {
+// Interface
+interface SearchProps {
+  searchQuery: string
+  access_token: string | undefined
+}
+
+export default function Search_Bar({ searchQuery, access_token }: SearchProps) {
   const [query, setQuery] = useState("")
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       Search(query, access_token)
     }
+    console.log(access_token)
   }
 
   return (

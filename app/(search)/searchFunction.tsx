@@ -1,6 +1,8 @@
 // Dependencies
 import Link from "next/link"
 
+const apiUrl = process.env.API_URL
+
 export async function Search(
   searchQuery: string | undefined,
   access_token: string | undefined
