@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
 export function WelcomeModalCard({
-  
   prevButtonState,
   nextButtonState,
   cardNumber,
@@ -24,13 +23,11 @@ export function WelcomeModalCard({
     <div className="px-16 py-16 bg-green-1 w-full h-screen">
       <div className="mx-auto flex flex-col gap-4 h-full max-w-6xl">
         <div className="flex justify-between">
-          <h2 className="text-green-12 text-2xl font-bold">
-            Welcome to Nous!
-          </h2>
+          <h2 className="text-green-12 text-2xl font-bold">Welcome to Nous!</h2>
           <Badge className="self-center">{cardNumber}/3</Badge>
         </div>
-        <div className="h-full grid place-items-center border">
-          <Card className="flex justify-around m-2 p-2 w-full h-full">
+        <div className="h-full grid place-items-center ">
+          <Card className="relative flex justify-around m-2 p-2 w-full max-h-[540px] h-[540px] ">
             {children}
           </Card>
         </div>
@@ -45,7 +42,11 @@ export function WelcomeModalCard({
             </Button>
           )} */}
           {nextButtonState ? (
-            <Button variant="outline" onClick={handleNext} className="bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 border-2 border-green-6">
+            <Button
+              variant="outline"
+              onClick={handleNext}
+              className="bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 border-2 border-green-6"
+            >
               Next
             </Button>
           ) : (

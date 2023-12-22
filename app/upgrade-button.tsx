@@ -43,7 +43,7 @@ export default async function UpgradeButton() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="fixed p-3 m-2 top-1 right-16 bg-green-3 hover:bg-green-5 focus:bg-green-5 border border-green-7 hover:border-green-8"
+          className="p-3 m-2 bg-green-3 hover:bg-green-5 focus:bg-green-5 border border-green-7 hover:border-green-8"
         >
           Upgrade
         </Button>

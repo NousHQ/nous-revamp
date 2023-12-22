@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { DiscordIcon } from "@/components/icons"
 
 export default function ProfileMenuClient() {
   const supabase = createClientComponentClient()
@@ -24,7 +25,7 @@ export default function ProfileMenuClient() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="fixed p-1 m-2 top-2 right-4 rounded-full">
+      <DropdownMenuTrigger className="p-1 m-2 rounded-full">
         <Image src={userLogo} alt="user-img"></Image>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-3 mt-2">
@@ -35,6 +36,14 @@ export default function ProfileMenuClient() {
         </Link> */}
         <DropdownMenuItem className="cursor-pointer" onSelect={handleSignOut}>
           Sign out
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={"https://discord.gg/42tuRTN2eA"} className="text-sm">
+            <div className="flex justify-between items-center bg-greenA-4 hover:bg-greenA-6 px-4 py-0.5 rounded-xl mt-2">
+              <DiscordIcon className="w-4 h-4 mr-2 fill-emerald-800" />
+              Join our discord
+            </div>
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

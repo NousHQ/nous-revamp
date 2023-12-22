@@ -6,7 +6,10 @@ import { redirect } from "next/navigation"
 import logo from "@/public/logo.svg"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
+import Search_Bar from "@/app/(search)/searchBar"
+import { Search } from "@/app/(search)/searchFunction"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
+import { SyncButton } from "@/app/syncButton"
 
 import Loading from "./loadingResults"
 import ProfileMenuServer from "./profile-menu-server"
@@ -44,6 +47,7 @@ export default async function Home({
   ] = await Promise.all([sessionPromise, userProfilePromise])
 
   const access_token = session?.access_token
+
   if (error) {
     console.error(error)
     return
@@ -65,13 +69,16 @@ export default async function Home({
     console.log("[!] Searching for:", searchQuery, new Date())
 
   return (
-    <div key="1" className="h-screen flex flex-col justify-center bg-green-1">
-      <div className="flex flex-grow">
-        <SendAuthExtension access_token={access_token} />
-        <ProfileMenuServer />
-        {!isSubscribed && <UpgradeButton />}
-        <Sidebar />
-        {!isOnboarded && <WelcomeModal />}
+    <div key="1" className="min-h-screen w-auto flex bg-green-1">
+      <SendAuthExtension access_token={access_token} />
+      {!isOnboarded && <WelcomeModal />}
+      <Sidebar />
+      <div className="flex flex-col flex-grow">
+        <div className="flex flex-row-reverse h-14 w-full">
+          <ProfileMenuServer />
+          <SyncButton />
+          {!isSubscribed && <UpgradeButton />}
+        </div>
         <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">
           <div className="flex items-center">
             {/* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> */}
@@ -79,6 +86,7 @@ export default async function Home({
               Hey {userName}!
             </h2>
           </div>
+          {/*<Search_Bar access_token={access_token} />*/}
           <SearchBar session={session} />
           {searchQuery.length > 0 ? (
             <Suspense fallback={<Loading />}>
@@ -88,12 +96,7 @@ export default async function Home({
               />
             </Suspense>
           ) : null}
-          {/* {searchQuery.length > 0 ? (
-            <SearchResults
-              searchQuery={searchQuery}
-              access_token={access_token}
-            />
-          ) : null} */}
+          {/*<Search_Bar access_token={access_token} />*/}
         </div>
       </div>
     </div>

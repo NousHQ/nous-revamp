@@ -11,16 +11,6 @@ const useDebounce = (value: string | number, delay = 500) => {
   const [debouncedValue, setDebouncedValue] = useState<string | number>(value)
   const timerRef = useRef<NodeJS.Timeout>()
 
-  //   useEffect(() => {
-  //     timerRef.current = setTimeout(() => setDebouncedValue(value), delay)
-
-  //     return () => {
-  //       clearTimeout(timerRef.current)
-  //     }
-  //   }, [value, delay])
-
-  //   return debouncedValue
-  // }
   useEffect(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current)
@@ -45,20 +35,6 @@ export default function SearchBar() {
   const [query, setQuery] = useState("")
   const debouncedValue = useDebounce(query, 500)
 
-  // const triggerSearch = useCallback(() => {
-  //   console.log("searching", debouncedValue)
-  //   if (query.trim() === "") {
-  //     router.replace(`/`)
-  //   } else {
-  //     router.replace(`/?q=${query.toString()}`)
-  //   }
-
-  // }, [debouncedValue])
-
-  // useEffect(() => {
-  //   triggerSearch()
-  // }, [debouncedValue])
-
   useEffect(() => {
     if (debouncedValue) {
       router.replace(`/?q=${debouncedValue.toString()}`)
@@ -68,7 +44,7 @@ export default function SearchBar() {
   }, [debouncedValue, router])
 
   return (
-    <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
+    <div className="w-3/4 mx-auto mt-8 flex items-center rounded-full">
       <Image
         src={searchIcon}
         alt="search"
