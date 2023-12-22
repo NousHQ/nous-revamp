@@ -55,7 +55,11 @@ type BookmarkNodeProps = {
   node: ParsedLink | ParsedFolder
 }
 
-export function SyncButton() {
+interface SyncButtonProps {
+  maxCheckedCount: number | null
+}
+
+export function SyncButton({ maxCheckedCount }: SyncButtonProps) {
   const supabase = createClientComponentClient()
   const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([])
   const [checkedCount, setCheckedCount] = useState(0)
@@ -196,7 +200,7 @@ export function SyncButton() {
     setBookmarkTree((prevTree: ParsedFolder[]) => {
       const updatedTree = prevTree.map(updateNode) // Update the checked state in the tree
       const newCount = countCheckedLinks(updatedTree) // Count checked links in the updated tree
-      if (newCount > 200) {
+      if (maxCheckedCount !== null && newCount > maxCheckedCount) {
         setFireToast(true)
         return prevTree // Don't update the tree if the count exceeds 200
       }
@@ -379,7 +383,7 @@ export function SyncButton() {
         <DialogHeader>
           <DialogTitle>Import Bookmarks</DialogTitle>
           <DialogDescription>
-            {checkedCount}/200 Want more? Get PRO!
+            {checkedCount}/{maxCheckedCount} Want more? Get PRO!
           </DialogDescription>
         </DialogHeader>
 
@@ -391,7 +395,12 @@ export function SyncButton() {
         <DialogFooter>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button className="bg-green-3 border border-green-6" type="submit">Save changes</Button>
+              <Button
+                className="bg-green-3 border border-green-6"
+                type="submit"
+              >
+                Save changes
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-green-1">
               <AlertDialogHeader>
@@ -406,7 +415,10 @@ export function SyncButton() {
                 <AlertDialogCancel className="bg-green-3">
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction className="bg-green-9 text-white hover:bg-green-10" onClick={() => handleSubmit()}>
+                <AlertDialogAction
+                  className="bg-green-9 text-white hover:bg-green-10"
+                  onClick={() => handleSubmit()}
+                >
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>

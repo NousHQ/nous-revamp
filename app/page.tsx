@@ -29,61 +29,63 @@ export default async function Home({
   searchParams: SearchParams
 }) {
   const supabase = createServerComponentClient({ cookies })
-  const sessionPromise = supabase.auth.getSession()
-  const userProfilePromise = sessionPromise.then(({ data: { session } }) => {
-    if (!session) {
-      redirect("/login")
-    }
+  let id,
+    user_name,
+    email_id,
+    profile_picture,
+    is_onboarded,
+    is_subscribed,
+    user_limit
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-    const { user } = session
-    return supabase.from("user_profiles").select("*").eq("id", user.id)
-  })
+  if (!session) {
+    redirect("/login")
+  }
 
-  const [
-    {
-      data: { session },
-    },
-    { data: userProfileData, error },
-  ] = await Promise.all([sessionPromise, userProfilePromise])
+  const user = session.user
+  const userProfileResponse = await supabase
+    .from("user_profiles")
+    .select("*")
+    .eq("id", user.id)
 
   const access_token = session?.access_token
-
-  if (error) {
-    console.error(error)
-    return
+  if (userProfileResponse.data && userProfileResponse.data.length > 0) {
+    const userProfile = userProfileResponse.data[0]
+    id = userProfile.id
+    user_name = userProfile.user_name
+    email_id = userProfile.email_id
+    profile_picture = userProfile.profile_picture
+    is_onboarded = userProfile.is_onboarded
+    is_subscribed = userProfile.is_subscribed
+    user_limit = userProfile.user_limit
   }
+  const { count } = await supabase
+    .from("saved_uris")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user?.id)
 
-  let userName, isOnboarded, isSubscribed, userLimit
-
-  if (userProfileData && userProfileData.length > 0) {
-    const { user_name, is_onboarded, is_subscribed, user_limit } =
-      userProfileData[0]
-    userName = user_name
-    isOnboarded = is_onboarded
-    isSubscribed = is_subscribed
-    userLimit = user_limit
-  }
+  const maxCheckedCount = user_limit - (count ?? 0)
 
   const searchQuery = searchParams?.q || ""
-  searchQuery.length > 0 &&
-    console.log("[!] Searching for:", searchQuery, new Date())
 
   return (
     <div key="1" className="min-h-screen w-auto flex bg-green-1">
       <SendAuthExtension access_token={access_token} />
-      {!isOnboarded && <WelcomeModal />}
+      {!is_onboarded && <WelcomeModal user={user} maxCheckedCount={maxCheckedCount} />}
       <Sidebar />
       <div className="flex flex-col flex-grow">
         <div className="flex flex-row-reverse h-14 w-full">
           <ProfileMenuServer />
-          <SyncButton />
-          {!isSubscribed && <UpgradeButton />}
+          <SyncButton maxCheckedCount={maxCheckedCount} />
+          {!is_subscribed && <UpgradeButton />}
         </div>
         <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">
           <div className="flex items-center">
             {/* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> */}
             <h2 className="text-4xl font-bold text-green-12">
-              Hey {userName}!
+              Hey {user_name}!
             </h2>
           </div>
           {/*<Search_Bar access_token={access_token} />*/}

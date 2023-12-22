@@ -37,13 +37,18 @@ type ParsedFolder = {
 //   node: ParsedLink | ParsedFolder
 // }
 
-export default function WelcomeModal() {
+interface WelcomeModalProps {
+  user: User | null;
+  maxCheckedCount: number | null;
+}
+
+
+export default function WelcomeModal({user, maxCheckedCount}: WelcomeModalProps) {
   const supabase = createClientComponentClient()
   const [open, setOpen] = useState(true)
   const [cardNumber, setCardNumber] = useState(1)
   const [prevButtonState, setPrevButtonState] = useState(true)
   const [nextButtonState, setNextButtonState] = useState(true)
-  const [user, setUser] = useState<User | null>(null)
   const [name, setName] = useState("")
 
   const [userLimit, setUserLimit] = useState<number | null>(null)
@@ -74,27 +79,7 @@ export default function WelcomeModal() {
   }, [fireToast, toast])
 
   useEffect(() => {
-    const initUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
-      const { data: user_profiles, error } = await supabase
-        .from("user_profiles")
-        .select("user_limit")
-
-      const { count } = await supabase
-      .from("saved_uris")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user?.id)
-
-      console.log(user_profiles)
-
-      if (user_profiles && user_profiles.length > 0) {
-        setUserLimit(user_profiles[0].user_limit - (count ?? 0))
-      }
-    }
-    initUser()
+    setUserLimit(maxCheckedCount)
   }, [])
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
