@@ -18,9 +18,16 @@ interface SearchProps {
   access_token: string | undefined
 }
 
+// Define the search result interface
+interface SearchResult {
+  id: string
+  uri: string
+  title: string
+  // Add other properties as needed
+}
 export default function Search_Bar({ access_token }: SearchProps) {
   const [query, setQuery] = useState("")
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const handleKeyDown = (e: any) => {
@@ -29,7 +36,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
       setSearchResults([])
       Search(query, access_token)
         .then((data) => {
-          setSearchResults(data)
+          setSearchResults(data.results) // Set the results array to the state
           setIsLoading(false)
         })
         .catch((err) => console.error(err))
@@ -37,7 +44,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
   }
 
   return (
-    <div className="w-full mt-16 h-full">
+    <div className="w-full mt-8 h-full">
       <div className="flex w-4/5 mx-auto items-center rounded-full">
         <Image
           src={searchIcon}
@@ -57,7 +64,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
         <Loading />
       ) : (
         <ScrollArea className="h-fit mx-auto max-w-5xl p-4 flex flex-col flex-grow">
-          {searchResults.results?.map((searchResult) => (
+          {searchResults.map((searchResult) => (
             <Link key={searchResult.id} href={searchResult.uri} target="_blank">
               <div className="flex flex-col my-2 p-2 bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg mb-2 transition-all transform duration-300 ease-in-out shadow-md">
                 <h2 className="text-md font-medium text-green-12">
