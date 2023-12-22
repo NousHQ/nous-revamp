@@ -22,6 +22,8 @@ export default function Search_Bar({ access_token }: SearchProps) {
   const [query, setQuery] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [isData, setIsData] = useState(true)
 
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
@@ -31,9 +33,51 @@ export default function Search_Bar({ access_token }: SearchProps) {
         .then((data) => {
           setSearchResults(data)
           setIsLoading(false)
+
+          // Check if data is found or not
+          if (data.results.length < 0) {
+            setIsData(false)
+          } else {
+            setIsData(true)
+          }
         })
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          console.error(err)
+          setIsError(true)
+          setIsLoading(false)
+        })
     }
+  }
+
+  function SearchState() {
+    return (
+      <div>
+        {isData ? (
+          <ScrollArea className="h-fit mx-auto max-w-5xl p-4 flex flex-col flex-grow">
+            {searchResults.results?.map((searchResult) => (
+              <Link
+                key={searchResult.id}
+                href={searchResult.uri}
+                target="_blank"
+              >
+                <div className="flex flex-col my-2 p-2 bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg mb-2 transition-all transform duration-300 ease-in-out shadow-md">
+                  <h2 className="text-md font-medium text-green-12">
+                    {searchResult.title}
+                  </h2>
+                  <p className="text-sm text-neutral-500">{searchResult.uri}</p>
+                </div>
+              </Link>
+            ))}
+          </ScrollArea>
+        ) : (
+          <div className="bg-green-3 my-4 text-green-12 rounded-lg shadow-lg p-4 mb-2">
+            <h3 className="text-md font-medium dark:text-zinc-50">
+              No results found :/{" "}
+            </h3>
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -53,21 +97,20 @@ export default function Search_Bar({ access_token }: SearchProps) {
         />
       </div>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <ScrollArea className="h-fit mx-auto max-w-5xl p-4 flex flex-col flex-grow">
-          {searchResults.results?.map((searchResult) => (
-            <Link key={searchResult.id} href={searchResult.uri} target="_blank">
-              <div className="flex flex-col my-2 p-2 bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg mb-2 transition-all transform duration-300 ease-in-out shadow-md">
-                <h2 className="text-md font-medium text-green-12">
-                  {searchResult.title}
-                </h2>
-                <p className="text-sm text-neutral-500">{searchResult.uri}</p>
-              </div>
-            </Link>
-          ))}
-        </ScrollArea>
+      {isLoading ? <Loading /> : <SearchState />}
+
+      {isError && (
+        <div className="bg-red-200 mt-4 rounded-lg shadow-md p-4 mb-2">
+          <h3 className="text-md font-medium dark:text-zinc-50">
+            Something failed :/{" "}
+          </h3>
+          <Link
+            className="text-green-12 underline"
+            href="https://x.com/sidbing"
+          >
+            Tweet at me to let me know!
+          </Link>
+        </div>
       )}
     </div>
   )
