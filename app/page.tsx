@@ -1,20 +1,14 @@
 // @ts-nocheck
-import { Suspense } from "react"
 import { cookies } from "next/headers"
-import Image from "next/image"
 import { redirect } from "next/navigation"
 import logo from "@/public/logo.svg"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import Search_Bar from "@/app/(search)/searchBar"
-import { Search } from "@/app/(search)/searchFunction"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
 import { SyncButton } from "@/app/syncButton"
 
-import Loading from "./loadingResults"
 import ProfileMenuServer from "./profile-menu-server"
-import SearchBar from "./search-bar-client"
-import SearchResults from "./searchResults"
 import SendAuthExtension from "./send-auth-extension"
 import Sidebar from "./sidebar-server"
 import UpgradeButton from "./upgrade-button"
@@ -71,6 +65,7 @@ export default async function Home({
   return (
     <div key="1" className="min-h-screen w-auto flex bg-green-1">
       {!isOnboarded && <WelcomeModal />}
+      <SendAuthExtension access_token={access_token} />
       <Sidebar />
       <div className="flex flex-col flex-grow">
         <div className="flex flex-row-reverse h-14 w-full">
@@ -78,28 +73,14 @@ export default async function Home({
           <SyncButton />
           {!isSubscribed && <UpgradeButton />}
         </div>
-        <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">
+        <div className="flex flex-grow flex-col items-center justify-start max-h-screen">
           <div className="flex items-center">
             {/* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> */}
             <h2 className="text-4xl font-bold text-green-12">
               Hey {userName}!
             </h2>
           </div>
-          <div className="flex flex-col">
-            {/*<Search_Bar access_token={access_token} />*/}
-            <div className="flex flex-col">
-              <SearchBar session={session} />
-              {searchQuery.length > 0 ? (
-                <Suspense fallback={<Loading />}>
-                  <SearchResults
-                    searchQuery={searchQuery}
-                    access_token={access_token}
-                  />
-                </Suspense>
-              ) : null}
-              {/*<Search_Bar access_token={access_token} />*/}
-            </div>
-          </div>
+          <Search_Bar access_token={access_token} />
         </div>
       </div>
 

@@ -44,7 +44,7 @@ export default function SearchBar() {
   }, [debouncedValue, router])
 
   return (
-    <div className="w-3/4 mx-auto mt-16 flex items-center rounded-full">
+    <div className="w-full mx-auto mt-16 flex items-center rounded-full">
       <Image
         src={searchIcon}
         alt="search"

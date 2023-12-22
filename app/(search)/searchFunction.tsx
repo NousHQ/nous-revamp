@@ -17,8 +17,7 @@ export async function Search(
         },
       }
     )
-    const data = await response.json()
-    console.log(data)
+    return await response.json()
   } catch (err) {
     console.error(err)
   }
