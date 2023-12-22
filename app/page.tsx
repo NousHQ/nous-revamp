@@ -85,21 +85,17 @@ export default async function Home({
               Hey {userName}!
             </h2>
           </div>
-          <div className="flex flex-col">
-            {/*<Search_Bar access_token={access_token} />*/}
-            <div className="flex flex-col">
-              <SearchBar session={session} />
-              {searchQuery.length > 0 ? (
-                <Suspense fallback={<Loading />}>
-                  <SearchResults
-                    searchQuery={searchQuery}
-                    access_token={access_token}
-                  />
-                </Suspense>
-              ) : null}
-              {/*<Search_Bar access_token={access_token} />*/}
-            </div>
-          </div>
+          {/*<Search_Bar access_token={access_token} />*/}
+          <SearchBar session={session} />
+          {searchQuery.length > 0 ? (
+            <Suspense fallback={<Loading />}>
+              <SearchResults
+                searchQuery={searchQuery}
+                access_token={access_token}
+              />
+            </Suspense>
+          ) : null}
+          {/*<Search_Bar access_token={access_token} />*/}
         </div>
       </div>
 
