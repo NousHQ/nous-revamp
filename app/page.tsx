@@ -70,6 +70,7 @@ export default async function Home({
 
   return (
     <div key="1" className="min-h-screen w-auto flex bg-green-1">
+      <SendAuthExtension access_token={access_token} />
       {!isOnboarded && <WelcomeModal />}
       <Sidebar />
       <div className="flex flex-col flex-grow">
@@ -98,41 +99,6 @@ export default async function Home({
           {/*<Search_Bar access_token={access_token} />*/}
         </div>
       </div>
-
-      {/*<div className="flex flex-grow">*/}
-      {/*  <SendAuthExtension access_token={access_token} />*/}
-      {/*  <ProfileMenuServer />*/}
-      {/*  {!isSubscribed && <UpgradeButton />}*/}
-      {/*  <Sidebar />*/}
-      {/*  {!isOnboarded && <WelcomeModal />}*/}
-      {/*  <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">*/}
-      {/*    <div className="flex items-center">*/}
-      {/*      /!* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> *!/*/}
-      {/*      <h2 className="text-4xl font-bold text-green-12">*/}
-      {/*        Hey {userName}!*/}
-      {/*      </h2>*/}
-      {/*    </div>*/}
-      {/*    <div className="flex flex-col">*/}
-      {/*      <SearchBar session={session} />*/}
-      {/*      {searchQuery.length > 0 ? (*/}
-      {/*        <Suspense fallback={<Loading />}>*/}
-      {/*          <SearchResults*/}
-      {/*            searchQuery={searchQuery}*/}
-      {/*            access_token={access_token}*/}
-      {/*          />*/}
-      {/*        </Suspense>*/}
-      {/*      ) : null}*/}
-      {/*      /!*<Search_Bar access_token={access_token} />*!/*/}
-      {/*    </div>*/}
-
-      {/*    /!* {searchQuery.length > 0 ? (*/}
-      {/*      <SearchResults*/}
-      {/*        searchQuery={searchQuery}*/}
-      {/*        access_token={access_token}*/}
-      {/*      />*/}
-      {/*    ) : null} *!/*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </div>
   )
 }
