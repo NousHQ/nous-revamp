@@ -57,6 +57,16 @@ export default function WelcomeModal({
   const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([])
   const [checkedCount, setCheckedCount] = useState(0)
   const [fireToast, setFireToast] = useState(false)
+  const [isChromeRuntime, setIsChromeRuntime] = useState(false)
+
+  useEffect(() => {
+    setIsChromeRuntime(
+      typeof chrome !== "undefined" && typeof chrome.runtime !== "undefined"
+    )
+    setNextButtonState(false)
+
+  }, [])
+
   const { toast } = useToast()
 
   // First useEffect for handling the toast
@@ -191,7 +201,16 @@ export default function WelcomeModal({
       case 1:
         return (
           <div className="flex flex-grid items-center w-full">
-            <NameCard handleNameChange={handleNameChange} />
+            {isChromeRuntime ? (
+              <NameCard handleNameChange={handleNameChange} />
+            ) : (
+              <a
+                className="text-green-11 text-base font-semibold text-center underline flex flex-col items-center justify-center gap-4 w-full"
+                href="https://chromewebstore.google.com/detail/nous/kdnfbangdkkddhgamelpdcgfmaecicel"
+              >
+                Download the Chrome Extension to proceed further!
+              </a>
+            )}
           </div>
         )
       case 2:
@@ -200,13 +219,9 @@ export default function WelcomeModal({
             <h3 className="text-green-12 text-lg font-semibold text-center">
               Import your bookmarks
             </h3>
-            <a
-              className="text-green-11 text-base font-semibold text-center underline"
-              href="https://chromewebstore.google.com/detail/nous/kdnfbangdkkddhgamelpdcgfmaecicel"
-            >
-              Download the Chrome Extension to import and index all your Chrome
-              bookmarks.
-            </a>
+            <p className="text-green-11 text-base font-semibold text-center underline">
+              Nous will import and index all your Chrome bookmarks.
+            </p>
             <ImportCard
               user={user}
               name={name}

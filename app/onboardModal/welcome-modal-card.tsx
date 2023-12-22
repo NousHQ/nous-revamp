@@ -32,15 +32,6 @@ export function WelcomeModalCard({
           </Card>
         </div>
         <div className="flex justify-end">
-          {/* {prevButtonState ? (
-            <Button variant="outline" onClick={handlePrev}>
-              Previous
-            </Button>
-          ) : (
-            <Button disabled variant="outline">
-              Previous
-            </Button>
-          )} */}
           {nextButtonState ? (
             <Button
               variant="outline"
