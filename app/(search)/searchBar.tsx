@@ -46,6 +46,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
           setIsError(true)
           setIsLoading(false)
         })
+        .catch((err) => console.error(err))
     }
   }
 
