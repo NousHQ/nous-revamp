@@ -25,7 +25,7 @@ export default function ProfileMenuClient() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="fixed p-1 m-2 top-2 right-4 rounded-full">
+      <DropdownMenuTrigger className="p-1 m-2 rounded-full">
         <Image src={userLogo} alt="user-img"></Image>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-3 mt-2">

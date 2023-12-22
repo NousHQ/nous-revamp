@@ -285,7 +285,7 @@ export default function ImportCard({
     if ("url" in node) {
       // Link
       return (
-        <div className="flex justify-between ml-5 bg-green-3 hover:bg-green-4">
+        <div className="flex justify-between align-middle items-center ml-5 bg-green-3 hover:bg-green-4 px-2 py-2 mb-0.5">
           <a
             href={node.url}
             target="_blank"
@@ -316,7 +316,7 @@ export default function ImportCard({
             toggleFolderOpen(node.id, newOpenState)
           }
         >
-          <div className="flex items-center justify-between space-x-4 bg-green-3 hover:bg-green-4">
+          <div className="flex items-center justify-between space-x-4 bg-green-3 hover:bg-green-4 px-2">
             <div className="flex justify-start">
               <CollapsibleTrigger asChild>
                 <Button variant="ghost">
@@ -353,19 +353,19 @@ export default function ImportCard({
   }
 
   return (
-    <div className="flex flex-col justify-between h-full bg-green-2">
-      <ScrollArea className="flex-1 min-w-[620px] max-h-[550px] rounded-md p-4 w-full">
+    <div className="flex flex-col items-center h-full max-h-full w-full">
+      <ScrollArea className="flex-1 min-w-[620px] p-4 w-full max-h-[400px]">
         {bookmarkTree.map((node) => (
           <BookmarkNode key={node.id} node={node} />
         ))}
       </ScrollArea>
-      <div className="p-2 text-sage-12 font-semibold text-sm">
+      <div className="flex flex-col p-2 text-sage-12 font-semibold text-sm text-center">
         <p>
           {checkedCount}/{maxCheckedCount} bookmarks selected.
         </p>
         <p>You can have 250 total bookmarks with the free version. </p>
-
-        {/* <AlertDialog>
+      </div>
+      {/* <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button type="submit">Save changes</Button>
         </AlertDialogTrigger>
@@ -385,7 +385,6 @@ export default function ImportCard({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog> */}
-      </div>
     </div>
   )
 }

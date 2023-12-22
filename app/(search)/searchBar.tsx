@@ -16,13 +16,12 @@ interface SearchProps {
   access_token: string | undefined
 }
 
-export default function Search_Bar({ searchQuery, access_token }: SearchProps) {
+export default function Search_Bar({ access_token }: SearchProps) {
   const [query, setQuery] = useState("")
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
-      Search(query, access_token)
+      Search(query, access_token).then((r) => console.log(r))
     }
-    console.log(access_token)
   }
 
   return (
