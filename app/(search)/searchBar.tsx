@@ -18,9 +18,16 @@ interface SearchProps {
   access_token: string | undefined
 }
 
+interface SearchResult {
+  id: string
+  uri: string
+  title: string
+  // Add other properties as needed
+}
+
 export default function Search_Bar({ access_token }: SearchProps) {
   const [query, setQuery] = useState("")
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isData, setIsData] = useState(true)
@@ -31,7 +38,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
       setSearchResults([])
       Search(query, access_token)
         .then((data) => {
-          setSearchResults(data)
+          setSearchResults(data.results)
           setIsLoading(false)
 
           // Check if data is found or not
@@ -55,7 +62,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
       <div>
         {isData ? (
           <ScrollArea className="h-fit mx-auto max-w-5xl p-4 flex flex-col flex-grow">
-            {searchResults.results?.map((searchResult) => (
+            {searchResults.map((searchResult) => (
               <Link
                 key={searchResult.id}
                 href={searchResult.uri}
@@ -82,7 +89,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
   }
 
   return (
-    <div className="w-full mt-16 h-full">
+    <div className="w-full mt-8 h-full">
       <div className="flex w-4/5 mx-auto items-center rounded-full">
         <Image
           src={searchIcon}

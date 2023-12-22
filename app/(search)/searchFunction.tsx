@@ -1,22 +1,18 @@
 // Dependencies
 import Link from "next/link"
 
-const apiUrl = process.env.API_URL
-
 export async function Search(
   searchQuery: string | undefined,
   access_token: string | undefined
 ) {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   try {
-    const response = await fetch(
-      `https://api.nous.fyi/api/search?query=${searchQuery}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    )
+    const response = await fetch(`${apiUrl}/api/search?query=${searchQuery}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
     return await response.json()
   } catch (err) {
     console.error(err)
