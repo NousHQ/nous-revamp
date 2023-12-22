@@ -55,7 +55,11 @@ type BookmarkNodeProps = {
   node: ParsedLink | ParsedFolder
 }
 
-export function SyncButton() {
+interface SyncButtonProps {
+  maxCheckedCount: number | null
+}
+
+export function SyncButton({ maxCheckedCount }: SyncButtonProps) {
   const supabase = createClientComponentClient()
   const [bookmarkTree, setBookmarkTree] = useState<ParsedFolder[]>([])
   const [checkedCount, setCheckedCount] = useState(0)
@@ -196,7 +200,7 @@ export function SyncButton() {
     setBookmarkTree((prevTree: ParsedFolder[]) => {
       const updatedTree = prevTree.map(updateNode) // Update the checked state in the tree
       const newCount = countCheckedLinks(updatedTree) // Count checked links in the updated tree
-      if (newCount > 200) {
+      if (maxCheckedCount !== null && newCount > maxCheckedCount) {
         setFireToast(true)
         return prevTree // Don't update the tree if the count exceeds 200
       }
@@ -369,17 +373,17 @@ export function SyncButton() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="p-3 m-2 text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:text-white focus:outline-none focus:ring focus:ring-gray-300"
+          className="p-3 m-2 text-white bg-green-9 hover:bg-green-10"
         >
           Sync Bookmarks
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-white border-2 border-black max-w-5xl h-[700px]">
+      <DialogContent className="bg-green-1 border-2 border-green-6 max-w-5xl h-[700px]">
         <DialogHeader>
           <DialogTitle>Import Bookmarks</DialogTitle>
           <DialogDescription>
-            {checkedCount}/200 Want more? Get PRO!
+            {checkedCount}/{maxCheckedCount} Want more? Get PRO!
           </DialogDescription>
         </DialogHeader>
 
@@ -391,9 +395,14 @@ export function SyncButton() {
         <DialogFooter>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button type="submit">Save changes</Button>
+              <Button
+                className="bg-green-3 border border-green-6"
+                type="submit"
+              >
+                Save changes
+              </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-white">
+            <AlertDialogContent className="bg-green-1">
               <AlertDialogHeader>
                 <AlertDialogTitle>Select these bookmarks?</AlertDialogTitle>
                 <AlertDialogDescription>
@@ -403,10 +412,13 @@ export function SyncButton() {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel className="bg-white">
+                <AlertDialogCancel className="bg-green-3">
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleSubmit()}>
+                <AlertDialogAction
+                  className="bg-green-9 text-white hover:bg-green-10"
+                  onClick={() => handleSubmit()}
+                >
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>

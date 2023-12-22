@@ -37,8 +37,8 @@ export default function Search_Bar({ access_token }: SearchProps) {
   }
 
   return (
-    <div className="w-3/5 mx-auto mt-16 h-full">
-      <div className="flex items-center rounded-full">
+    <div className="w-full mt-16 h-full">
+      <div className="flex w-4/5 mx-auto items-center rounded-full">
         <Image
           src={searchIcon}
           alt="search"
@@ -56,10 +56,10 @@ export default function Search_Bar({ access_token }: SearchProps) {
       {isLoading ? (
         <Loading />
       ) : (
-        <ScrollArea className="h-fit p-4 flex flex-col flex-grow">
+        <ScrollArea className="h-fit mx-auto max-w-5xl p-4 flex flex-col flex-grow">
           {searchResults.results?.map((searchResult) => (
             <Link key={searchResult.id} href={searchResult.uri} target="_blank">
-              <div className="flex flex-col my-2 p-2 rounded-l bg-green-100 hover:bg-green-200 transition-all transform duration-300 ease-in-out shadow-md">
+              <div className="flex flex-col my-2 p-2 bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg mb-2 transition-all transform duration-300 ease-in-out shadow-md">
                 <h2 className="text-md font-medium text-green-12">
                   {searchResult.title}
                 </h2>
