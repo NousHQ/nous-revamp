@@ -38,12 +38,14 @@ type ParsedFolder = {
 // }
 
 interface WelcomeModalProps {
-  user: User | null;
-  maxCheckedCount: number | null;
+  user: User | null
+  maxCheckedCount: number | null
 }
 
-
-export default function WelcomeModal({user, maxCheckedCount}: WelcomeModalProps) {
+export default function WelcomeModal({
+  user,
+  maxCheckedCount,
+}: WelcomeModalProps) {
   const supabase = createClientComponentClient()
   const [open, setOpen] = useState(true)
   const [cardNumber, setCardNumber] = useState(1)
@@ -198,9 +200,13 @@ export default function WelcomeModal({user, maxCheckedCount}: WelcomeModalProps)
             <h3 className="text-green-12 text-lg font-semibold text-center">
               Import your bookmarks
             </h3>
-            <p className="text-green-11 text-base font-semibold text-center">
-              Nous will import and index all your Chrome bookmarks.
-            </p>
+            <a
+              className="text-green-11 text-base font-semibold text-center underline"
+              href="https://chromewebstore.google.com/detail/nous/kdnfbangdkkddhgamelpdcgfmaecicel"
+            >
+              Download the Chrome Extension to import and index all your Chrome
+              bookmarks.
+            </a>
             <ImportCard
               user={user}
               name={name}
