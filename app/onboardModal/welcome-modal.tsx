@@ -60,13 +60,14 @@ export default function WelcomeModal({
   const [isChromeRuntime, setIsChromeRuntime] = useState(false)
 
   useEffect(() => {
-    setIsChromeRuntime(
+    const isRuntimeAvailable =
       typeof chrome !== "undefined" && typeof chrome.runtime !== "undefined"
-    )
-    setNextButtonState(false)
+    setIsChromeRuntime(isRuntimeAvailable)
 
+    if (!isRuntimeAvailable) {
+      setNextButtonState(false)
+    }
   }, [])
-
   const { toast } = useToast()
 
   // First useEffect for handling the toast
