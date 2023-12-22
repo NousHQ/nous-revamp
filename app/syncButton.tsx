@@ -369,13 +369,13 @@ export function SyncButton() {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="p-3 m-2 text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 hover:text-white focus:outline-none focus:ring focus:ring-gray-300"
+          className="p-3 m-2 text-white bg-green-9 hover:bg-green-10"
         >
           Sync Bookmarks
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-white border-2 border-black max-w-5xl h-[700px]">
+      <DialogContent className="bg-green-1 border-2 border-green-6 max-w-5xl h-[700px]">
         <DialogHeader>
           <DialogTitle>Import Bookmarks</DialogTitle>
           <DialogDescription>
@@ -391,9 +391,9 @@ export function SyncButton() {
         <DialogFooter>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button type="submit">Save changes</Button>
+              <Button className="bg-green-3 border border-green-6" type="submit">Save changes</Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-white">
+            <AlertDialogContent className="bg-green-1">
               <AlertDialogHeader>
                 <AlertDialogTitle>Select these bookmarks?</AlertDialogTitle>
                 <AlertDialogDescription>
@@ -403,10 +403,10 @@ export function SyncButton() {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel className="bg-white">
+                <AlertDialogCancel className="bg-green-3">
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleSubmit()}>
+                <AlertDialogAction className="bg-green-9 text-white hover:bg-green-10" onClick={() => handleSubmit()}>
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>

@@ -365,26 +365,6 @@ export default function ImportCard({
         </p>
         <p>You can have 250 total bookmarks with the free version. </p>
       </div>
-      {/* <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button type="submit">Save changes</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Select these bookmarks?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will start downloading and indexing the selected bookmarks.
-              They will slowly show up on the sidebar and you will be able to search them.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="bg-white">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => handleSubmit()}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog> */}
     </div>
   )
 }
