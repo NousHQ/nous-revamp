@@ -69,9 +69,10 @@ export default async function Home({
   return (
     <div key="1" className="min-h-screen w-auto flex bg-green-1">
       <SendAuthExtension access_token={access_token} />
-      { (
+      {!is_onboarded && (
         <WelcomeModal user={user} maxCheckedCount={maxCheckedCount} />
       )}
+
       <Sidebar />
       <div className="flex flex-col flex-grow">
         <div className="flex flex-row-reverse h-14 w-full">
