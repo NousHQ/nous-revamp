@@ -73,7 +73,7 @@ export default async function Home({
         <WelcomeModal user={user} maxCheckedCount={maxCheckedCount} />
       )}
 
-      <Sidebar />
+      {/*<Sidebar />*/}
       <div className="flex flex-col flex-grow">
         <div className="flex flex-row-reverse h-14 w-full">
           <ProfileMenuServer />

@@ -29,13 +29,20 @@ interface SearchResult {
 export default function Search_Bar({ access_token }: SearchProps) {
   const [query, setQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+  const [initState, setInitState] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isData, setIsData] = useState(true)
 
+  console.log(query)
   // Search Bar Function Handler
+  if (!query && !initState) {
+    setInitState(true)
+  }
+
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
+      setInitState(false)
       setIsLoading(true)
       setSearchResults([])
       Search(query, access_token)
@@ -79,7 +86,11 @@ export default function Search_Bar({ access_token }: SearchProps) {
       {isLoading ? (
         <Loading />
       ) : (
-        <SearchState searchResults={searchResults} isData={isData} />
+        <SearchState
+          searchResults={searchResults}
+          isData={isData}
+          initState={initState}
+        />
       )}
       {isError && (
         <div className="bg-red-200 mt-4 rounded-lg shadow-md p-4 mb-2">
