@@ -11,6 +11,7 @@ import searchIcon from "@/public/searchIcon.svg"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Search } from "@/app/(search)/searchFunction"
+import { SearchState } from "@/app/(search)/searchUI"
 import Loading from "@/app/loadingResults"
 
 // Interface
@@ -32,6 +33,7 @@ export default function Search_Bar({ access_token }: SearchProps) {
   const [isError, setIsError] = useState(false)
   const [isData, setIsData] = useState(true)
 
+  // Search Bar Function Handler
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       setIsLoading(true)
@@ -57,37 +59,6 @@ export default function Search_Bar({ access_token }: SearchProps) {
     }
   }
 
-  function SearchState() {
-    return (
-      <div>
-        {isData ? (
-          <ScrollArea className="h-fit mx-auto max-w-5xl p-4 flex flex-col flex-grow">
-            {searchResults.map((searchResult) => (
-              <Link
-                key={searchResult.id}
-                href={searchResult.uri}
-                target="_blank"
-              >
-                <div className="flex flex-col my-2 p-2 bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg mb-2 transition-all transform duration-300 ease-in-out shadow-md">
-                  <h2 className="text-md font-medium text-green-12">
-                    {searchResult.title}
-                  </h2>
-                  <p className="text-sm text-neutral-500">{searchResult.uri}</p>
-                </div>
-              </Link>
-            ))}
-          </ScrollArea>
-        ) : (
-          <div className="bg-green-3 my-4 text-green-12 rounded-lg shadow-lg p-4 mb-2">
-            <h3 className="text-md font-medium dark:text-zinc-50">
-              No results found :/{" "}
-            </h3>
-          </div>
-        )}
-      </div>
-    )
-  }
-
   return (
     <div className="w-full mt-8 h-full">
       <div className="flex w-4/5 mx-auto items-center rounded-full">
@@ -105,8 +76,11 @@ export default function Search_Bar({ access_token }: SearchProps) {
         />
       </div>
 
-      {isLoading ? <Loading /> : <SearchState />}
-
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SearchState searchResults={searchResults} isData={isData} />
+      )}
       {isError && (
         <div className="bg-red-200 mt-4 rounded-lg shadow-md p-4 mb-2">
           <h3 className="text-md font-medium dark:text-zinc-50">
