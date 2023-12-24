@@ -34,3 +34,19 @@ export async function deleteData(formData: FormData) {
   //     revalidatePath('/')
   //   }
 }
+
+export async function getBookmarks() {
+  const supabase = createServerActionClient({ cookies })
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const { data, error } = await supabase
+    .from("saved_uris")
+    .select("*")
+    .eq("user_id", user?.id)
+    .order("created_at", { ascending: false })
+
+  return data
+}

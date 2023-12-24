@@ -7,6 +7,7 @@ import logo from "@/public/logo.svg"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import Search_Bar from "@/app/(search)/searchBar"
+import { getBookmarks } from "@/app/actions"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
 import { SyncButton } from "@/app/syncButton"
 
@@ -66,65 +67,32 @@ export default async function Home({
 
   const searchQuery = searchParams?.q || ""
 
+  const bookmarks = await getBookmarks()
+
   return (
-    <div key="1" className="min-h-screen w-auto flex bg-green-1">
+    <div key="1" className="w-auto flex bg-green-1">
       <SendAuthExtension access_token={access_token} />
       {!is_onboarded && (
         <WelcomeModal user={user} maxCheckedCount={maxCheckedCount} />
       )}
 
       {/*<Sidebar />*/}
-      <div className="flex flex-col flex-grow">
+      <div className="relative flex flex-col flex-grow">
         <div className="flex flex-row-reverse h-14 w-full">
           <ProfileMenuServer />
           <SyncButton maxCheckedCount={maxCheckedCount} />
           {!is_subscribed && <UpgradeButton />}
         </div>
-        <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">
+        <div className="flex flex-col items-center p-4 mt-8">
           <div className="flex items-center">
             {/* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> */}
             <h2 className="text-4xl font-bold text-green-12">
               Hey {user_name}!
             </h2>
           </div>
-          <Search_Bar access_token={access_token} />
+          <Search_Bar access_token={access_token} bookmarks={bookmarks} />
         </div>
       </div>
-
-      {/*<div className="flex flex-grow">*/}
-      {/*  <SendAuthExtension access_token={access_token} />*/}
-      {/*  <ProfileMenuServer />*/}
-      {/*  {!isSubscribed && <UpgradeButton />}*/}
-      {/*  <Sidebar />*/}
-      {/*  {!isOnboarded && <WelcomeModal />}*/}
-      {/*  <div className="flex flex-grow flex-col items-center justify-start p-4 mt-8">*/}
-      {/*    <div className="flex items-center">*/}
-      {/*      /!* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> *!/*/}
-      {/*      <h2 className="text-4xl font-bold text-green-12">*/}
-      {/*        Hey {userName}!*/}
-      {/*      </h2>*/}
-      {/*    </div>*/}
-      {/*    <div className="flex flex-col">*/}
-      {/*      <SearchBar session={session} />*/}
-      {/*      {searchQuery.length > 0 ? (*/}
-      {/*        <Suspense fallback={<Loading />}>*/}
-      {/*          <SearchResults*/}
-      {/*            searchQuery={searchQuery}*/}
-      {/*            access_token={access_token}*/}
-      {/*          />*/}
-      {/*        </Suspense>*/}
-      {/*      ) : null}*/}
-      {/*      /!*<Search_Bar access_token={access_token} />*!/*/}
-      {/*    </div>*/}
-
-      {/*    /!* {searchQuery.length > 0 ? (*/}
-      {/*      <SearchResults*/}
-      {/*        searchQuery={searchQuery}*/}
-      {/*        access_token={access_token}*/}
-      {/*      />*/}
-      {/*    ) : null} *!/*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </div>
   )
 }
