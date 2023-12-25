@@ -89,7 +89,7 @@ export default function Search_Bar({ access_token, bookmarks }: SearchProps) {
         ></Image>
         <Input
           className="bg-greenA-3 hover:bg-greenA-4 focus:bg-greenA-5 pl-10 w-full text-xl font-semibold py-3 rounded-full ring-0 focus:ring-2 focus:ring-green-8 transition-all transform duration-300 ease-in-out"
-          placeholder="Search..."
+          placeholder="Search your bookmarks here..."
           type="search"
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
