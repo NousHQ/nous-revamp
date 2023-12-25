@@ -8,6 +8,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import Search_Bar from "@/app/(search)/searchBar"
 import { getBookmarks } from "@/app/actions"
+import { Header } from "@/app/header"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
 import { SyncButton } from "@/app/syncButton"
 
@@ -76,16 +77,13 @@ export default async function Home({
         <WelcomeModal user={user} maxCheckedCount={maxCheckedCount} />
       )}
 
-      {/*<Sidebar />*/}
       <div className="relative flex flex-col flex-grow">
-        <div className="flex flex-row-reverse h-14 w-full">
-          <ProfileMenuServer />
-          <SyncButton maxCheckedCount={maxCheckedCount} />
-          {!is_subscribed && <UpgradeButton />}
-        </div>
+        <Header
+          maxCheckedCount={maxCheckedCount}
+          is_subscribed={is_subscribed}
+        />
         <div className="flex flex-col items-center p-4 mt-8">
           <div className="flex items-center">
-            {/* <Image src={logo} alt="logo" height={45} className="ml-4"></Image> */}
             <h2 className="text-4xl font-bold text-green-12">
               Hey {user_name}!
             </h2>
