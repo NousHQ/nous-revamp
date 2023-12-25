@@ -33,12 +33,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "bg-background font-sans antialiased",
             fontSans.variable
           )}
         >
           <SupabaseProvider>
-            <div className="relative flex min-h-screen flex-col bg-green-1">
+            <div className="flex flex-col bg-green-1">
               <div className="flex-1">{children}</div>
             </div>
             <Toaster />

@@ -240,8 +240,6 @@ export function SyncButton({ maxCheckedCount }: SyncButtonProps) {
     const checkedNodes = bookmarkTree
       .map((node) => extractCheckedNodes(node))
       .filter(Boolean) as ParsedFolder[]
-    console.log(checkedNodes)
-    console.log(session?.access_token)
 
     const { data, error } = await supabase
       .from("imported_bookmarks")
