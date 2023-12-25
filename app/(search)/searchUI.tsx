@@ -43,7 +43,7 @@ export function Bookmarks({ bookmarks }: BookmarkProps) {
 
 export function SearchState({ searchResults }: SearchProps) {
   return (
-    <ScrollArea className="h-fit p-4 flex flex-col flex-grow">
+    <ScrollArea className="h-fit flex flex-col flex-grow">
       {searchResults?.map((searchResult: SearchResultsInterface) => (
         <Link key={searchResult.id} href={searchResult.uri} target="_blank">
           <div className="flex flex-col my-2 p-2 bg-green-3 hover:bg-green-4 focus:bg-green-5 text-green-12 rounded-lg mb-2 transition-all transform duration-300 ease-in-out shadow-md">

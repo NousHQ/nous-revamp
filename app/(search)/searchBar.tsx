@@ -97,7 +97,9 @@ export default function Search_Bar({ access_token, bookmarks }: SearchProps) {
       </div>
 
       {isLoading ? (
-        <Loading />
+        <div className="flex flex-col h-full w-4/5 mx-auto mb-20 pt-4 pb-64">
+          <Loading />
+        </div>
       ) : (
         <div className="flex flex-col h-full w-4/5 mx-auto mb-20 pt-4 pb-64">
           {initState ? (
