@@ -72,7 +72,7 @@ export default async function Home({
 
   return (
     <div key="1" className="w-auto flex bg-green-1">
-      <SendAuthExtension access_token={access_token} />
+      <SendAuthExtension user={user} access_token={access_token} />
       {!is_onboarded && (
         <WelcomeModal user={user} maxCheckedCount={maxCheckedCount} />
       )}

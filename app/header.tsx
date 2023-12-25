@@ -14,10 +14,10 @@ export function Header({
 }) {
   return (
     <div className="flex">
-      <div className="flex items-center select-none">
+      {/* <div className="flex items-center select-none">
         <Image src={logo} alt="logo" height={45} className="ml-4 mr-2" />
         <h2 className="text-3xl font-bold text-green-12">Nous</h2>
-      </div>
+      </div> */}
       <div className="flex flex-row-reverse h-14 w-full">
         <ProfileMenuServer />
         <SyncButton maxCheckedCount={maxCheckedCount} />

@@ -97,7 +97,6 @@ export default function WelcomeModal({
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value)
-    console.log(name)
   }
 
   async function handleSubmitBookmarks(): Promise<void> {
@@ -129,9 +128,7 @@ export default function WelcomeModal({
     const checkedNodes = bookmarkTree
       .map((node) => extractCheckedNodes(node))
       .filter(Boolean) as ParsedFolder[]
-    console.log(checkedNodes)
 
-    console.log(session?.access_token)
     const { data, error } = await supabase
       .from("imported_bookmarks")
       .insert({
@@ -150,7 +147,6 @@ export default function WelcomeModal({
   }
 
   const finishOnboarding = async () => {
-    console.log("Sent name: " + name)
     await supabase
       .from("user_profiles")
       .update({ user_name: name })
@@ -177,7 +173,6 @@ export default function WelcomeModal({
     }
   }
   const handlePrev = () => {
-    console.log(cardNumber)
     if (cardNumber > 1) {
       setCardNumber((prevCardNumber) => prevCardNumber - 1)
       setNextButtonState(true)
