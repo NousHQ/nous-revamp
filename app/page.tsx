@@ -1,21 +1,14 @@
 // @ts-nocheck
-import { Suspense } from "react"
 import { cookies } from "next/headers"
-import Image from "next/image"
 import { redirect } from "next/navigation"
-import logo from "@/public/logo.svg"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import Search_Bar from "@/app/(search)/searchBar"
 import { getBookmarks } from "@/app/actions"
 import { Header } from "@/app/header"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
-import { SyncButton } from "@/app/syncButton"
 
-import ProfileMenuServer from "./profile-menu-server"
 import SendAuthExtension from "./send-auth-extension"
-import Sidebar from "./sidebar-server"
-import UpgradeButton from "./upgrade-button"
 
 interface SearchParams {
   q: string
