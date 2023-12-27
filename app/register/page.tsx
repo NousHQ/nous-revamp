@@ -3,7 +3,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import logo from "@/public/logo.png"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import {
+  User,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,13 +15,19 @@ import OauthButton from "@/components/oauth-button"
 
 import Messages from "./messages"
 
+interface ExtendedUser extends User {
+  iat: number
+}
+
 export default async function Register() {
   const supabase = createServerComponentClient({ cookies })
   const {
     data: { session },
   } = await supabase.auth.getSession()
-  if (session) {
-    redirect("/")
+
+  const user = session?.user as ExtendedUser
+  if (session && user?.iat < 1703681014) {
+    return redirect("/")
   }
 
   return (

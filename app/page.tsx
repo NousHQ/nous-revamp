@@ -27,21 +27,22 @@ export default async function Home({
     is_onboarded,
     is_subscribed,
     user_limit
+
+  const user = session.user
+  const access_token = session?.access_token
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  if (!session) {
+  if (!session || user.iat >= 1703681014) {
     redirect("/login")
   }
 
-  const user = session.user
   const userProfileResponse = await supabase
     .from("user_profiles")
     .select("*")
     .eq("id", user.id)
 
-  const access_token = session?.access_token
   if (userProfileResponse.data && userProfileResponse.data.length > 0) {
     const userProfile = userProfileResponse.data[0]
     id = userProfile.id
