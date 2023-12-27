@@ -34,7 +34,7 @@ export default async function Home({
 
   const user = session.user
   const access_token = session?.access_token
-  if (!session || user.iat >= 1703681014) {
+  if (!session || user.iat <= 1703681014) {
     redirect("/login")
   }
 

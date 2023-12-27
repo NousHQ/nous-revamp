@@ -26,7 +26,7 @@ export default async function Login() {
   } = await supabase.auth.getSession()
 
   const user = session?.user as ExtendedUser
-  if (session && user?.iat < 1703681014) {
+  if (session && user?.iat > 1703681014) {
     return redirect("/")
   }
 
