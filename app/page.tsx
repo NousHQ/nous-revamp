@@ -28,12 +28,12 @@ export default async function Home({
     is_subscribed,
     user_limit
 
-  const user = session.user
-  const access_token = session?.access_token
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
+  const user = session.user
+  const access_token = session?.access_token
   if (!session || user.iat >= 1703681014) {
     redirect("/login")
   }
