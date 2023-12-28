@@ -9,6 +9,7 @@ import { Header } from "@/app/header"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
 
 import SendAuthExtension from "./send-auth-extension"
+import { red } from "@radix-ui/colors"
 
 interface SearchParams {
   q: string
@@ -32,12 +33,17 @@ export default async function Home({
     data: { session },
   } = await supabase.auth.getSession()
 
-  const user = session.user
-  const access_token = session?.access_token
-  if (!session || user.iat <= 1703681014) {
+  if (!session) {
     redirect("/login")
   }
 
+  const user = session?.user
+
+  if (!user || user.iat <= 1703681014) {
+    redirect("/login")
+  }
+
+  const access_token = session?.access_token
   const userProfileResponse = await supabase
     .from("user_profiles")
     .select("*")
