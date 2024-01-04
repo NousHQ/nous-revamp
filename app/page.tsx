@@ -38,12 +38,14 @@ export default async function Home({
   }
 
   const access_token = session?.access_token
-  try {
-    const secret = process.env.SUPABASE_JWT_SECRET;
-    jwt.verify(access_token, secret);
-  } catch (err) {
-    console.error('Invalid token');
-    redirect("/login")
+  if (access_token) {
+    try {
+      const secret = process.env.SUPABASE_JWT_SECRET;
+      jwt.verify(access_token, secret);
+    } catch (err) {
+      console.error('Invalid token');
+      redirect("/login");
+    }
   }
 
   const user = session?.user
