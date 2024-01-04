@@ -2,6 +2,7 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import jwt from "jsonwebtoken"
 
 import Search_Bar from "@/app/(search)/searchBar"
 import { getBookmarks } from "@/app/actions"
@@ -9,7 +10,6 @@ import { Header } from "@/app/header"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
 
 import SendAuthExtension from "./send-auth-extension"
-import { red } from "@radix-ui/colors"
 
 interface SearchParams {
   q: string
@@ -37,13 +37,22 @@ export default async function Home({
     redirect("/login")
   }
 
-  const user = session?.user
-
-  if (!user || user.iat <= 1703681014) {
+  const access_token = session?.access_token
+  try {
+    const secret = process.env.SUPABASE_JWT_SECRET;
+    jwt.verify(access_token, secret);
+  } catch (err) {
+    console.error('Invalid token');
     redirect("/login")
   }
 
-  const access_token = session?.access_token
+  const user = session?.user
+
+  // if (!user || user.iat <= 1703681014) {
+  //   redirect("/login")
+  // }
+
+
   const userProfileResponse = await supabase
     .from("user_profiles")
     .select("*")

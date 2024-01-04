@@ -1,9 +1,5 @@
-import { cookies } from "next/headers"
 import Image from "next/image"
-import Link from "next/link"
-import { redirect } from "next/navigation"
 import logo from "@/public/logo.png"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,8 +8,6 @@ import { Label } from "@/components/ui/label"
 import Messages from "./messages"
 
 export default async function PasswordResetForm() {
-  const supabase = createServerComponentClient({ cookies })
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-green-3">
       <div className="w-96 bg-green-1 rounded-lg shadow-xl p-8">

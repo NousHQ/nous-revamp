@@ -20,15 +20,15 @@ interface ExtendedUser extends User {
 }
 
 export default async function Register() {
-  const supabase = createServerComponentClient({ cookies })
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  // const supabase = createServerComponentClient({ cookies })
+  // const {
+  //   data: { session },
+  // } = await supabase.auth.getSession()
 
-  const user = session?.user as ExtendedUser
-  if (session && user?.iat > 1703681014) {
-    return redirect("/")
-  }
+  // const user = session?.user as ExtendedUser
+  // if (session && user?.iat > 1703681014) {
+  //   return redirect("/")
+  // }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-green-3">
