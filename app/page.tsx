@@ -5,21 +5,12 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 import jwt from "jsonwebtoken"
 
 import Search_Bar from "@/app/(search)/searchBar"
-import { getBookmarks } from "@/app/actions"
 import { Header } from "@/app/header"
 import WelcomeModal from "@/app/onboardModal/welcome-modal"
 
 import SendAuthExtension from "./send-auth-extension"
 
-interface SearchParams {
-  q: string
-}
-
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: SearchParams
-}) {
+export default async function Home() {
   const supabase = createServerComponentClient({ cookies })
   let id,
     user_name,
@@ -39,13 +30,12 @@ export default async function Home({
 
   const access_token = session?.access_token
   if (access_token) {
-    try {
-      const secret = process.env.SUPABASE_JWT_SECRET;
-      jwt.verify(access_token, secret);
-    } catch (err) {
-      console.error('Invalid token');
-      redirect("/login");
-    }
+    const secret = process.env.SUPABASE_JWT_SECRET
+    jwt.verify(access_token, secret, function (err) {
+      if (err) {
+        redirect("/login")
+      }
+    })
   }
 
   const user = session?.user
@@ -53,7 +43,6 @@ export default async function Home({
   // if (!user || user.iat <= 1703681014) {
   //   redirect("/login")
   // }
-
 
   const userProfileResponse = await supabase
     .from("user_profiles")
@@ -70,6 +59,7 @@ export default async function Home({
     is_subscribed = userProfile.is_subscribed
     user_limit = userProfile.user_limit
   }
+
   const { count } = await supabase
     .from("saved_uris")
     .select("*", { count: "exact", head: true })
@@ -77,9 +67,11 @@ export default async function Home({
 
   const maxCheckedCount = user_limit - (count ?? 0)
 
-  const searchQuery = searchParams?.q || ""
-
-  const bookmarks = await getBookmarks()
+  const { data: bookmarks, error } = await supabase
+    .from("saved_uris")
+    .select("*")
+    .eq("user_id", user?.id)
+    .order("created_at", { ascending: false })
 
   return (
     <div key="1" className="w-auto flex bg-green-1">

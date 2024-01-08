@@ -4,7 +4,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import logo from "@/public/logo.png"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import jwt, { Secret } from "jsonwebtoken"
+import jwt, { JsonWebTokenError, Secret } from "jsonwebtoken"
 
 // Import the Secret type from the jsonwebtoken package
 
@@ -20,16 +20,15 @@ export default async function Login() {
   const {
     data: { session },
   } = await supabase.auth.getSession()
-  
+
   const access_token = session?.access_token
   if (session && access_token) {
-    try {
-      const secret = process.env.SUPABASE_JWT_SECRET
-      jwt.verify(access_token, secret as Secret) // Cast secret as Secret type
-      redirect("/")
-    } catch (err) {
-      console.error("Invalid token")
-    }
+    const secret = process.env.SUPABASE_JWT_SECRET
+    jwt.verify(access_token, secret as Secret, function (err) {
+      if (!err) {
+        redirect("/")
+      }
+    }) // Cast secret as Secret type
   }
 
   return (

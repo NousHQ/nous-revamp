@@ -21,13 +21,12 @@ export default async function Register() {
 
   const access_token = session?.access_token
   if (session && access_token) {
-    try {
-      const secret = process.env.SUPABASE_JWT_SECRET
-      jwt.verify(access_token, secret as Secret) // Cast secret as Secret type
-      redirect("/")
-    } catch (err) {
-      console.error("Invalid token")
-    }
+    const secret = process.env.SUPABASE_JWT_SECRET
+    jwt.verify(access_token, secret as Secret, function (err) {
+      if (!err) {
+        redirect("/")
+      }
+    }) // Cast secret as Secret type
   }
 
   return (
